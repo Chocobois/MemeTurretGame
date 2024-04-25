@@ -294,7 +294,7 @@ export class Enemy extends Phaser.GameObjects.Container {
             this.noHitCheck = false;
         }
         if(!this.hasPlayedSpawnSound && this.x < 2080) {
-            this.scene.sound.play("spawn");
+            this.scene.sound.play("spawn", {volume: 0.25});
             this.hasPlayedSpawnSound = true;
         }
         if(this.slowTimer > 0) {
