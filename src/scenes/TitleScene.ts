@@ -2,6 +2,7 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { Music } from "@/components/Music";
 
 import { title, version } from "@/version.json";
+import { GlobalVariables } from "@/components/GlobalVariables";
 
 const creditsLeft = `${title} 
 
@@ -31,10 +32,13 @@ export class TitleScene extends BaseScene {
 	public select: Phaser.Sound.WebAudioSound;
 	public select2: Phaser.Sound.WebAudioSound;
 
+	public gameDataHandler: GlobalVariables;
+
 	public isStarting: boolean;
 
 	constructor() {
 		super({ key: "TitleScene" });
+		this.gameDataHandler = new GlobalVariables();
 	}
 
 	create(): void {
@@ -220,7 +224,7 @@ export class TitleScene extends BaseScene {
 				this.fade(true, 1000, 0x000000);
 				this.addEvent(1050, () => {
 					this.musicTitle.stop();
-					this.scene.start("GameScene");
+					this.scene.start("GameScene", {gameData: this.gameDataHandler});
 				});
 			});
 		}

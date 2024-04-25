@@ -13,6 +13,7 @@
 		"removeComments": true,
 		"stripInternal": true,
 		"allowJs": true,
+		"sourceMap": true,
 		"strictPropertyInitialization": false,
 		"paths": {
 			"@/*": ["./src/*"]

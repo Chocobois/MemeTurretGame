@@ -88,6 +88,18 @@ export class BaseScene extends Phaser.Scene {
 			.setPadding(2);
 	}
 
+	nextScene() {
+
+	}
+
+	scrollForward(){
+
+	}
+
+	scrollBackward(){
+		
+	}
+
 	// The image keeps its aspect ratio, but is resized to fit within the given dimension
 	fitToScreen(image: Phaser.GameObjects.Image): void {
 		image.setScale(Math.max(this.W / image.width, this.H / image.height));
