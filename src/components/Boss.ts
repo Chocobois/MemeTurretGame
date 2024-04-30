@@ -116,6 +116,50 @@ export class Boss extends Enemy {
                 {key: "loop", value: [0], args: [], conditions: []},
             ]),
         ],
+        [
+
+            /*RAY COMMANDS: 0:x 1:y 2:angle 3:dmg s0:lasertex s1:pointtex 4:radialwidth 5:pointradius
+        6:rotation 7:laserscale 8:pointscale 9:idletime 10:chargetime 11:ontime 12:fadetime
+        13:critchance chargealpha: number = 0.6, fadealpha: number = 0.6, onalpha: number=0.85, ticktimer: number = 250*/
+            //Mandala commands: s0:texture, 0:maxscale, 1:rotation, 2:expansiontime, 3:alpha, b0:playsound, s1:soundfile
+            new BossCommand(this, [
+                {key: "wait", value: [1000], args: [], conditions: []},
+                {key: "wait", value: [500], args: [], conditions: []},
+                //{key: "randomwalk_enemy", value: [2], args: [], conditions: []},
+                {key: "wait", value: [3750], args: [], conditions: []},
+                //{key: "loop", value: [1], args: [], conditions: []},
+            ]),
+            new BossCommand(this, [
+                {key: "wait", value: [1000], args: [], conditions: []},
+                {key: "wait", value: [500], args: [], conditions: []},
+                {key: "mandala", value: [2, 180, 1000, 0.75], args: ["mandala_brasil","charge_big"], conditions: [true]},
+                {key: "wait", value: [5750], args: [], conditions: []},
+                {key: "fadeMandala", value: [2000], args: [], conditions: []},
+                {key: "wait", value: [5750], args: [], conditions: []},
+                {key: "mandala", value: [2, -180, 1000, 0.75], args: ["mandala_brasil","charge_big"], conditions: [true]},
+
+            ]),
+            new BossCommand(this, [
+                {key: "wait", value: [1000], args: [], conditions: []},
+                {key: "changeSprite", value: [1,1], args: ["finalboss_2"], conditions: []},
+
+            ]),
+            new BossCommand(this, [
+                {key: "wait", value: [1000], args: [], conditions: []},
+                {key: "wait", value: [500], args: [], conditions: []},
+                {key: "laser", value: [0,0,180,450,36,72,0,1,1,1000,500,3000,500,1], args: ["yellow_laser","yellow_laser_origin"], conditions: []},
+                {key: "wait", value: [10000], args: [], conditions: []},
+                {key: "loop", value: [1], args: [], conditions: []},
+            ]),
+            new BossCommand(this, [
+                {key: "wait", value: [500], args: [], conditions: []},
+                //{key: "random_mines", value: [1], args: [], conditions: []},
+                {key: "wait", value: [1500], args: [], conditions: []},
+                //{key: "random_mines", value: [1], args: [], conditions: []},
+                {key: "wait", value: [2000], args: [], conditions: []},
+                {key: "loop", value: [0], args: [], conditions: []},
+            ]),
+        ],
         ];
         this.script = this.scriptList[this.currentScript];
         this.curSpinAngle = this.angle;
