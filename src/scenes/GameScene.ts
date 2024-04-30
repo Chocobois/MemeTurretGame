@@ -3,6 +3,7 @@ import { Player } from "@/components/Player";
 import { UI } from "@/components/UI";
 import { Enemy } from "@/components/Enemy";
 import { Turret } from "@/components/Turret";
+import { Effect } from "@/components/Effect";
 import { BasicEffect } from "@/components/BasicEffect";
 import { TextEffect } from "@/components/TextEffect";
 import { Projectile } from "@/components/Projectile";
@@ -11,6 +12,8 @@ import { UpgradeScene } from "./UpgradeScene";
 import { GlobalVariables } from "@/components/GlobalVariables";
 import { Music } from "@/components/Music";
 import { EnemyProjectile } from "@/components/EnemyProjectile";
+import { Boss } from "@/components/Boss";
+import { EnemyRay } from "@/components/EnemyRay";
 
 interface TurretPosition{
 	x: number;
@@ -24,15 +27,17 @@ export class GameScene extends BaseScene {
 	private player: Player;
 	private ui: UI;
 	private positions: TurretPosition[];
-	private hitEffects: BasicEffect[];
-	private gunEffects: BasicEffect[];
+	private hitEffects: Effect[];
+	private gunEffects: Effect[];
 	private textEffects: TextEffect[];
 	private waveSize: number = 1;
 	public enemyList: Enemy[];
+	public bossList: Enemy[];
 	public timer: number = 3000;
 	public activeTurret: Turret;
 	//public selectedTurret: number = 0;
 	public projectiles: Projectile[];
+	public enemyRays: EnemyRay[];
 	public enemyProjectiles: EnemyProjectile[];
 	public curProjID: number = 0;
 	public stageList: Stage;
@@ -43,6 +48,7 @@ export class GameScene extends BaseScene {
 	private bkgList: string[] = ["1-0", "1-1", "1-2", "1-3"];
 	private bkgTimer: number = 500;
 	private waitForEnemies: boolean = false;
+	private cutScene: boolean = false;
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -59,7 +65,9 @@ export class GameScene extends BaseScene {
 		this.stageList = new Stage(this);
 		this.stageList.setCurrentStage(this.gameData.currentStage);
 		this.enemyList = [];
+		this.bossList = [];
 		this.projectiles = [];
+		this.enemyRays = [];
 		this.enemyProjectiles = [];
 		this.gunEffects = [];
 		this.hitEffects = [];
@@ -89,14 +97,27 @@ export class GameScene extends BaseScene {
 		*/
 
 		this.ui = new UI(this);
+		this.ui.setDepth(0);
 		//this.sound.play("siren");
 
 		this.initTouchControls();
 	}
 
 	update(time: number, delta: number) {
-		this.ui.update(time, delta);
+		if(this.cutScene) {
+			return;
+		}
+		if(this.bkgTimer > 0) {
+			this.bkgTimer-= delta;
+			this.overlay.setAlpha(this.bkgTimer/7000);
+			if(this.bkgTimer <= 0) {
+				this.overlay.setAlpha(0);
+				this.scrollBkg();
+			}
+		}
 
+
+		this.ui.update(time, delta);
 		/*
 		if(this.timer > 0) {
 			this.timer -= delta;
@@ -108,21 +129,18 @@ export class GameScene extends BaseScene {
 			this.timer = 500+(Math.random()*500);
 		}
 		*/
-		if(this.bkgTimer > 0) {
-			this.bkgTimer-= delta;
-			this.overlay.setAlpha(this.bkgTimer/7000);
-			if(this.bkgTimer <= 0) {
-				this.overlay.setAlpha(0);
-				this.scrollBkg();
-			}
-		}
+
 		this.updateStage(delta, time);
 		this.updateTurrets(delta);
-		this.updateProjectiles(delta);
+		this.updateProjectiles(delta, time);
 		this.updateEnemies(delta, time);
 		this.updateEffects(delta, time);
 		
 		//this.player.update(time, delta);
+	}
+
+	progressCutscene() {
+
 	}
 
 	scrollBkg() {
@@ -130,15 +148,15 @@ export class GameScene extends BaseScene {
 
 			if(this.bkgIndex == (this.bkgList.length-1)) {
 				this.bkgIndex = 0;
+				this.background.setTexture(this.bkgList[0]);
 				this.overlay.setTexture(this.bkgList[this.bkgList.length-1]);
 				this.overlay.setAlpha(1);
-				this.background.setTexture(this.bkgList[0]);
 				this.bkgTimer = 20000;
 			} else {
 				this.bkgIndex++;
+				this.background.setTexture(this.bkgList[this.bkgIndex]);
 				this.overlay.setTexture(this.bkgList[this.bkgIndex-1]);
 				this.overlay.setAlpha(1);
-				this.background.setTexture(this.bkgList[this.bkgIndex]);
 				this.bkgTimer = 20000;
 			}
 
@@ -153,10 +171,22 @@ export class GameScene extends BaseScene {
 		}
 	}
 
+	addEnemiesFromBack(n: number, type: number, position: number[]){
+		this.waveSize = n;
+		for(let i = 0; i < this.waveSize; i++){
+
+			this.enemyList.push(new Enemy(this,2280,(position[0]+(Math.trunc(Math.random()*(position[1]-position[0])))),type));
+		}
+	}
+
+	pushEnemy(e: Enemy) {
+		this.enemyList.push(e);
+	}
+
 	updateStage(d: number, t: number) {
 		this.stageList.update(d, t);
 		if(this.waitForEnemies) {
-			if(this.enemyList.length <= 0) {
+			if((this.enemyList.length <= 0) && (this.bossList.length <= 0)) {
 				this.stageList.unStop();
 				this.waitForEnemies = false;
 			}
@@ -167,16 +197,27 @@ export class GameScene extends BaseScene {
 		this.activeTurret.update(d);
 	}
 
-	updateProjectiles(d: number) {
+	updateProjectiles(d: number, t: number) {
 		for(let p = this.projectiles.length-1; p >= 0; p--) {
 			this.projectiles[p].update(d);
 			for(let e = this.enemyList.length-1; e >= 0; e--) {
 				this.projectiles[p].collide(this.enemyList[e]);
 			}
+			for(let b = this.bossList.length-1; b >= 0; b--) {
+				this.projectiles[p].collide(this.bossList[b]);
+			}
 			this.projectiles[p].handleCollisionEffects();
 			if(this.projectiles[p].deleteFlag){
 				this.projectiles[p].destroy();
 				this.projectiles.splice(p,1);
+			}
+		}
+
+		for(let er = this.enemyRays.length-1; er >= 0; er--) {
+			this.enemyRays[er].update(d,t);
+			if(this.enemyRays[er].deleteFlag){
+				this.enemyRays[er].destroy();
+				this.enemyRays.splice(er,1);
 			}
 		}
 
@@ -200,13 +241,20 @@ export class GameScene extends BaseScene {
 				this.enemyList.splice(i,1);
 			}
 		}
+		for(let b = (this.bossList.length-1); b >= 0; b--){
+			this.bossList[b].update(d, t);
+			if(this.bossList[b].deleteFlag){
+				this.bossList[b].destroy();
+				this.bossList.splice(b,1);
+			}
+		}
 	}
 
-	addGunEffect(b: BasicEffect){
+	addGunEffect(b: Effect){
 		this.gunEffects.push(b);
 	}
 
-	addHitEffect(b: BasicEffect){
+	addHitEffect(b: Effect){
 		this.gunEffects.push(b);
 	}
 
@@ -216,7 +264,7 @@ export class GameScene extends BaseScene {
 				console.log("NULL INSTANCE EFFECT");
 				return;
 			}
-			this.gunEffects[g].update(d);
+			this.gunEffects[g].update(d, t);
 			if(this.gunEffects[g].deleteFlag) {
 				this.gunEffects[g].destroy();
 				this.gunEffects.splice(g,1);
@@ -224,7 +272,7 @@ export class GameScene extends BaseScene {
 		}
 
 		for(let h = (this.hitEffects.length-1); h >= 0; h--){
-			this.hitEffects[h].update(d);
+			this.hitEffects[h].update(d, t);
 			if(this.hitEffects[h].deleteFlag) {
 				this.hitEffects[h].destroy();
 				this.hitEffects.splice(h,1);
@@ -247,6 +295,10 @@ export class GameScene extends BaseScene {
 	addProjectile(p: Projectile){
 		this.projectiles.push(p);
 
+	}
+
+	addEnemyRay(l: EnemyRay) {
+		this.enemyRays.push(l);
 	}
 
 	addEnemyProjectile(p: EnemyProjectile){
@@ -321,6 +373,10 @@ export class GameScene extends BaseScene {
 				this.activeTurret.unfire();
 			}
 		});
+	}
+
+	addBoss(b: Boss){
+		this.bossList.push(b);
 	}
 
 	setWaitEnemies(){

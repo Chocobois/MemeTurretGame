@@ -1,6 +1,7 @@
 import { GameScene } from "@/scenes/GameScene";
+import { Effect } from "./Effect";
 
-export class BasicEffect extends Phaser.GameObjects.Container {
+export class BasicEffect extends Effect {
     public scene: GameScene;
     public sp: Phaser.GameObjects.Sprite;
     private isLooped: boolean;
@@ -19,7 +20,7 @@ export class BasicEffect extends Phaser.GameObjects.Container {
         super(scene,x,y);
         this.scene = scene;
         scene.add.existing(this);
-		this.sp = this.scene.add.sprite(x, y, value);
+		this.sp = this.scene.add.sprite(0, 0, value);
 		this.sp.setOrigin(0.5, 0.5);
         this.sp.setAngle((180/Math.PI)*angle);
         this.sp.setScale(scale, scale);
@@ -29,6 +30,8 @@ export class BasicEffect extends Phaser.GameObjects.Container {
         this.startingFrame = sFrame;
         this.currentFrame = this.startingFrame;
         this.sp.setFrame(this.startingFrame);
+        this.add(this.sp);
+        this.setDepth(2);
        // scene.add.existing(this.sp);
 	}
 
@@ -45,7 +48,7 @@ export class BasicEffect extends Phaser.GameObjects.Container {
         this.velocityY = 0;
     }
 
-    update(d: number){
+    update(d: number, t: number){
         if(this.deleteFlag){
             return;
         }

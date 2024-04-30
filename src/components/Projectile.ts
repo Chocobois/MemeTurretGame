@@ -38,6 +38,7 @@ export class Projectile extends Phaser.GameObjects.Container {
     private hasNotGeneratedGold: boolean = true;
     private flakCooldown = 0;
     private maxFlakCD: number = 250;
+    public hitBox: Phaser.Geom.Circle;
 
     constructor(scene: GameScene, x: number, y: number, angle: number, phys: ProjectileParams, data: TurretParams) {
 		super(scene, x, y);
@@ -56,6 +57,7 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.duration = this.physics.duration;
         this.pTimer = Math.trunc(this.info.pierceTimer*(1920/this.physics.velocity)*(1920/75));
         this.pCount = this.info.pierceCount;
+        this.hitBox = new Phaser.Geom.Circle(this.x, this.y, this.physics.radius);
 
 	}
 
@@ -94,7 +96,7 @@ export class Projectile extends Phaser.GameObjects.Container {
 
     hitCheck(target: Enemy)
     {
-        return Math.hypot(this.x-target.x, this.y-target.y) < (this.physics.radius + target.hitRadius);
+        return target.hitCheck(this, this.physics.radius);
     }
 
     handleCollisionEffects(){
@@ -187,14 +189,16 @@ export class Projectile extends Phaser.GameObjects.Container {
     }
 
     smite(target: Enemy){
-        target.unSmited = false;
+
         let sm = 0;
         sm = target.health*(1-this.info.smitePercent);
-        target.takeDamage(sm);
-        this.scene.addHitEffect(new BasicEffect(this.scene, "bad_fire", this.x, this.y-110, 6, 70, false, 0, 0, 1));
-        this.dmgThisTick += sm;
-        this.critThisTick = true;
-        this.scene.sound.play("bigfire");
+        if(target.takeDamage(sm)){
+            target.unSmited = false;
+            this.scene.addHitEffect(new BasicEffect(this.scene, "bad_fire", this.x, this.y-110, 6, 70, false, 0, 0, 1));
+            this.dmgThisTick += sm;
+            this.critThisTick = true;
+            this.scene.sound.play("bigfire");
+        }
     }
 
     collide(target: Enemy){
@@ -206,6 +210,7 @@ export class Projectile extends Phaser.GameObjects.Container {
         } else if(this.hitCheck(target))
         {
             let ddmg = 0;
+            let hitSuccess = false;
             let mult = 1;
             if(this.info.useScaling){
                 mult = this.scene.gameData.scaling;
@@ -221,15 +226,16 @@ export class Projectile extends Phaser.GameObjects.Container {
             }
             if(this.info.canPierce) {
                 ddmg = this.recalculateDamage(mult*this.physics.modifier*this.info.baseDamage*this.info.pierceMod, target);
+                if(this.pCount > 0) {
+                    this.pCount--;
+                }
+                this.hitThisTick = true;
+                this.scene.addHitEffect(new BasicEffect(this.scene, "hit_spark", this.x, this.y, 3, 50, false, 0, Math.random()*360, 1));
+                if(this.pCount == 0) {
+                    this.deleteFlag = true;
+                }
                 if(target.takePierceDamage(ddmg, this.physics.pID, this.pTimer)) {
-                    if(this.pCount > 0) {
-                        this.pCount--;
-                    }
-                    if(this.pCount == 0) {
-                        this.deleteFlag = true;
-                    }
-                    this.hitThisTick = true;
-                    this.scene.addHitEffect(new BasicEffect(this.scene, "hit_spark", this.x, this.y, 3, 50, false, 0, Math.random()*360, 1));
+                    this.dmgThisTick += ddmg;
                 }
             } else if (this.physics.isMissile) {
                 if(target.collidedWithMissile)
@@ -258,25 +264,24 @@ export class Projectile extends Phaser.GameObjects.Container {
                 this.deleteFlag = true;
             } else {
                 ddmg = this.recalculateDamage(mult*this.physics.modifier*this.info.baseDamage, target);
-                target.takeDamage(ddmg);
                 this.scene.addHitEffect(new BasicEffect(this.scene, "hit_spark", this.x, this.y, 3, 50, false, 0, 0, 1));
                 this.hitThisTick = true;
+                if(target.takeDamage(ddmg)){
+                    this.dmgThisTick += ddmg;
+                }
                 this.deleteFlag = true;
             }
-
             if(!this.physics.onHitDisabled) {
                 if(this.info.onHit > 0) {
                     let xdmg = 0;
                     xdmg = this.recalculateDamage(mult*this.info.onHit, target);
                     this.scene.sound.play("onhit");
                     this.scene.addHitEffect(new BasicEffect(this.scene, "blue_sparkle", this.x, this.y, 15, 15, false, 0, (Math.random()*360), 0.5));
-                    this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(xdmg)+"", "blue", 30));
-                    target.takeDamage(xdmg);
-
+                    if(target.takeDamage(xdmg)){
+                        this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(xdmg)+"", "blue", 30));    
+                    }
                 }
-
             }
-            this.dmgThisTick += ddmg;
         }
     }
 

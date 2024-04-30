@@ -1,6 +1,7 @@
 import { GameScene } from "@/scenes/GameScene";
 import { TextEffect } from "./TextEffect";
 import { BasicEffect } from "./BasicEffect";
+import { Boss } from "./Boss";
 
 interface StageCommand{
 	command: string;
@@ -26,6 +27,9 @@ export class Stage {
         this.stage_1 = [
             {command: "wait", value: [1500]},
             //{command: "endStage", value: [1000]},
+            //{command: "boss", value: [1500, 540, 6]},
+            //{command: "wait", value: [100000000000]},
+            //
             {command: "wait", value: [1000]},
             {command: "spawn", value: [3,5]}, 
             {command: "wait", value: [2500]}, 
@@ -207,7 +211,19 @@ export class Stage {
                     this.pend = true;
                 }
                 break;
-            }  case "announce": {
+            }   case "boss": {
+                if(this.pend) {
+                    break;
+                }
+                this.scene.addBoss(new Boss(this.scene, this.stageList[this.currentStage][this.currentStep].value[0], this.stageList[this.currentStage][this.currentStep].value[1], 
+                    this.stageList[this.currentStage][this.currentStep].value[2]));
+                this.currentStep++;
+                if(this.currentStep >= this.stageList[this.currentStage].length) {
+                    this.currentStep = this.stageList[this.currentStage].length-1;
+                    this.pend = true;
+                }
+                break;
+            }   case "announce": {
                 if(this.pend) {
                     break;
                 }
@@ -244,6 +260,8 @@ export class Stage {
             }
         }
     }
+
+
 
     unStop(){
         this.valence = 1;

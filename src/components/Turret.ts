@@ -58,9 +58,9 @@ export class Turret{
 		this.powerUpInfo = new PowerUpHandler(this.scene);
 		this.turretDisplay = new TurretModel(scene,x,y);
 		this.defaultParams = {
-            baseDamage: 15,
+            baseDamage: 25,
             critChance: 0, critDmg: 2, critMod: 1,
-            rof: 1, acc: 0,
+            rof: 1.6, acc: 0,
             shotgun: false, shotgunPellets: 0, shotgunDmg: 0,
             pspeed: 1,
             onHit: 0,
@@ -100,7 +100,7 @@ export class Turret{
 		this.turretDisplay.update(d, this.curAngle);
 		if(this.health <= 0) {
 			this.scene.gameData.loseLife();
-			this.scene.sound.play("turret_dead");
+			this.scene.sound.play("turret_dead", {volume:0.25});
 			this.health = this.maxHealth;
 		}
 		this.turretDisplay.updateHPDisplay(this.health, this.maxHealth);

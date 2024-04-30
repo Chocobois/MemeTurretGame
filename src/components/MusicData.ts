@@ -41,6 +41,20 @@ const Data = {
 		bpm: 120,
 		loop: true,
 	},
+	m_final2: {
+		offset: 2433184 / 48000,
+		bpm: 140,
+		loop: true,
+		start: 21.574,
+		end: 276.750,
+	},
+	m_final3: {
+		offset: 2433184 / 48000,
+		bpm: 144,
+		loop: true,
+		start: 55.174,
+		end: 271.885,
+	},
 };
 
 export type MusicKey = keyof typeof Data;

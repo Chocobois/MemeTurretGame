@@ -4,6 +4,7 @@ import { powerID} from "./PowerUpHandler";
 import { Turret } from "./Turret";
 import { PowerUpButton } from "./PowerUpButton";
 import { MusicKey } from "./MusicData";
+import { BossCommand } from "./BossCommand";
 
 export class GlobalVariables{
     public myWidgets: number[][];
@@ -23,6 +24,8 @@ export class GlobalVariables{
     public maxLives: number = 3;
     public extraMaxLives: number = 0;
     public failState: boolean = false;
+    public boss_script_0: BossCommand[];
+    public boss_script_1: BossCommand[];
     private widgetDropTable: number [][] =
 [
     //null
@@ -68,6 +71,8 @@ export class GlobalVariables{
 
         this.myTurrets = [];
         this.selectedTurret = -1;
+
+
         
     }
 

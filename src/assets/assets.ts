@@ -29,9 +29,17 @@ const images: Image[] = [
 	image('characters/missile', 'missile'),
 	image('characters/blank', 'blank'),
 	image('characters/flak', 'flak'),
+	image('characters/nuke', 'nuke'),
+	image('characters/mandala_brasil', 'mandala_brasil'),
 	image('characters/purple_bullet', 'purple_bullet'),
 	image('characters/small_bullet', 'small_bullet'),
 	image('characters/green_bullet', 'green_bullet'),
+	image('characters/brasil_laser', 'brasil_laser'),
+	image('characters/brasil_laser_origin', 'brasil_laser_origin'),
+	image('characters/yellow_laser', 'yellow_laser'),
+	image('characters/yellow_laser_origin', 'yellow_laser_origin'),
+	image('sprites/eiffel', 'eiffel'),
+	image('sprites/finalboss_2', 'finalboss_2'),
 
 	// Items
 	image('items/coin', 'coin'),
@@ -41,6 +49,10 @@ const images: Image[] = [
 	image('items/rainbow', 'rainbow'),
 	image('items/gray', 'gray'),
 	image('items/next_scene_button', 'next_scene_button'),
+
+	//
+	image('effects/reticle', 'reticle'),
+	image('effects/marker', 'marker'),
 
 	// UI
 	image('ui/hud', 'hud'),
@@ -58,7 +70,15 @@ const spritesheets: SpriteSheet[] = [
 	spritesheet("sprites/turretbase", "turretbase", 256, 256),
 	spritesheet("sprites/gun_1", "gun_1", 256, 256),
 	spritesheet("sprites/enemy_5", "enemy_5", 256, 256),
+	spritesheet("sprites/finalboss", "finalboss", 512, 860),
+	spritesheet("sprites/collider_1", "collider_1", 360, 360),
 	spritesheet("sprites/next_button", "next_button", 256, 256),
+	spritesheet("sprites/dice_vertical", "dice_vertical", 256, 256),
+	spritesheet("sprites/dice_horizontal", "dice_horizontal", 256, 256),
+	spritesheet("sprites/dice_cross", "dice_cross", 256, 256),
+	spritesheet("sprites/shield", "shield", 512, 860),
+	spritesheet("sprites/mine", "mine", 160, 160),
+	spritesheet("sprites/teslacopter", "teslacopter", 256, 256),
 	//spritesheet("sprites/bullet_1", "bullet_1", 128, 128),
 	spritesheet("effects/flash", "flash", 128, 128),
 	spritesheet("effects/hit_spark", "hit_spark", 128, 128),
@@ -72,6 +92,8 @@ const spritesheets: SpriteSheet[] = [
 	spritesheet("effects/blue_magic", "blue_magic", 128, 128),
 	spritesheet("effects/gold_magic", "gold_magic", 128, 128),
 	spritesheet("effects/rainbow_magic", "rainbow_magic", 128, 128),
+	
+
 
 ];
 
@@ -81,6 +103,8 @@ const audios: Audio[] = [
 	music('first', 'm_first'),
 	music('st1', 'm_st1'),
 	music('st2', 'm_st2'),
+	music('final2', 'm_final2'),
+	music('final3', 'm_final3'),
 	sound('tree/rustle', 't_rustle', 0.5),
 	sound('tree/siren', 'siren', 0.8),
 	sound('tree/shot_1', 'shot_1', 0.25),
@@ -104,6 +128,11 @@ const audios: Audio[] = [
 	sound('tree/turret_hit', 'turret_hit', 0.25),
 	sound('tree/escape', 'escape', 0.25),
 	sound('tree/big_gun_1', 'big_gun_1', 0.25),
+	sound('tree/dice', 'dice', 0.25),
+	sound('tree/big_explosion', 'big_explosion', 0.25),
+	sound('tree/reflect', 'reflect', 0.25),
+	sound('tree/dead_6', 'dead_6', 0.25),
+	sound('tree/charge_big', 'charge_big', 0.25),
 ];
 
 /* Fonts */

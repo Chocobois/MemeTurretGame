@@ -1,6 +1,7 @@
 import { GameScene } from "@/scenes/GameScene";
+import { Effect } from "./Effect";
 
-export class TextEffect extends Phaser.GameObjects.Container{
+export class TextEffect extends Effect{
     public scene: GameScene;
     public timer: number = 0;
     public maxTimer: number = 0;
@@ -53,6 +54,7 @@ export class TextEffect extends Phaser.GameObjects.Container{
         this.amod = 2*Math.random();
         this.negative = valence;
         this.amp = amplitude;
+        this.setDepth(2);
     }
 
     update(d: number, t: number) {
