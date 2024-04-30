@@ -40,6 +40,8 @@ const images: Image[] = [
 	image('characters/yellow_laser_origin', 'yellow_laser_origin'),
 	image('sprites/eiffel', 'eiffel'),
 	image('sprites/finalboss_2', 'finalboss_2'),
+	image('sprites/enemy_cross', 'enemy_cross'),
+	image('sprites/enemy_cross_small', 'enemy_cross_small'),
 
 	// Items
 	image('items/coin', 'coin'),
