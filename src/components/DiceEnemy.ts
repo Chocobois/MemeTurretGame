@@ -152,6 +152,8 @@ export class DiceEnemy extends Enemy{
             radius: 86*this.boomScale,
             critChance: 1,
             critDmg: 3,
+            useBox: false, boxParams: [10,10],
+            spin: false, spinSpeed: 0,
         }
         
         if((this.direction == "horizontal") || this.direction == "cross"){
@@ -167,6 +169,8 @@ export class DiceEnemy extends Enemy{
                     radius: 86*this.boomScale,
                     critChance: 1,
                     critDmg: 3,
+                    useBox: false, boxParams: [10,10],
+                    spin: false, spinSpeed: 0,
                 }
                 this.scene.addEnemyProjectile(new EnemyProjectile(this.scene,this.x+(hx),this.y,0,pri));
                 this.scene.addHitEffect(new BasicEffect(this.scene, "bad_fire", this.x+(hx), this.y-(150*this.boomScale), 6, 60, false, 0, 0, 1*this.boomScale));
@@ -179,6 +183,8 @@ export class DiceEnemy extends Enemy{
                     radius: 86*this.boomScale,
                     critChance: 1,
                     critDmg: 3,
+                    useBox: false, boxParams: [10,10],
+                    spin: false, spinSpeed: 0,
                 }
                 this.scene.addHitEffect(new BasicEffect(this.scene, "bad_fire", this.x+(-1*hx), this.y-(150*this.boomScale), 6, 60, false, 0, 0, 1*this.boomScale));
                 this.scene.addEnemyProjectile(new EnemyProjectile(this.scene,this.x+(-1*hx),this.y,0,pri));
@@ -198,6 +204,8 @@ export class DiceEnemy extends Enemy{
                     radius: 86*this.boomScale,
                     critChance: 1,
                     critDmg: 3,
+                    useBox: false, boxParams: [10,10],
+                    spin: false, spinSpeed: 0,
                 }
                 this.scene.addEnemyProjectile(new EnemyProjectile(this.scene,this.x,this.y+(vy),0,pri));
                 this.scene.addHitEffect(new BasicEffect(this.scene, "bad_fire", this.x, this.y+(vy)-(150*this.boomScale), 6, 60, false, 0, 0, 1*this.boomScale));
@@ -210,6 +218,8 @@ export class DiceEnemy extends Enemy{
                     radius: 86*this.boomScale,
                     critChance: 1,
                     critDmg: 3,
+                    useBox: false, boxParams: [10,10],
+                    spin: false, spinSpeed: 0,
                 }
                 this.scene.addHitEffect(new BasicEffect(this.scene, "bad_fire", this.x, this.y+(-1*vy)-(150*this.boomScale), 6, 60, false, 0, 0, 1*this.boomScale));
                 this.scene.addEnemyProjectile(new EnemyProjectile(this.scene,this.x,this.y+(-1*vy),0,pri));
@@ -224,12 +234,13 @@ export class DiceEnemy extends Enemy{
             radius: 86*this.boomScale,
             critChance: 1,
             critDmg: 3,
+            useBox: false, boxParams: [10,10],
+            spin: false, spinSpeed: 0,
         }
         this.scene.addEnemyProjectile(new EnemyProjectile(this.scene,this.x,this.y,0,pri));
         this.scene.addHitEffect(new BasicEffect(this.scene, "bad_fire", this.x, this.y-(150*this.boomScale), 6, 60, false, 0, 0, 1*this.boomScale));
         this.scene.sound.play("bigfire");
         this.despawn();
-
     }
 
     updateAnims(d: number) {

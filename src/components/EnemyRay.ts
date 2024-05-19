@@ -198,6 +198,11 @@ export class EnemyRay extends Phaser.GameObjects.Container {
             return false;
         }
     }
+
+    erase(){
+        this.deleteFlag = true;
+        this.scene.addHitEffect(new BasicEffect(this.scene, "blue_sparkle", this.x, this.y, 15, 20, false, 0, (Math.random()*360), 1));
+    }
     
     initGraphics() {
 

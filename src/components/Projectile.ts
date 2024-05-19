@@ -103,6 +103,9 @@ export class Projectile extends Phaser.GameObjects.Container {
         if(!this.hitThisTick) {
             return;
         }
+        if(this.dmgThisTick <= 0) {
+            return;
+        }
         if(this.info.canExplode && (this.explosionCD <= 0)){
             this.spawnExplosions();
         }
@@ -110,15 +113,15 @@ export class Projectile extends Phaser.GameObjects.Container {
             this.spawnFlak();
         }
         if(this.physics.isMissile) {
-            this.scene.sound.play("meme_explosion_sound");
+            this.scene.sound.play("meme_explosion_sound", {volume:0.25});
             return;
         } else if (this.info.canPierce){
-            this.scene.sound.play("hit_pierce");
+            this.scene.sound.play("hit_pierce", {volume:0.1});
         } else {
-            this.scene.sound.play("hit_1");
+            this.scene.sound.play("hit_1", {volume:0.2});
         }
         if(this.critThisTick) {
-            this.scene.sound.play("crit");
+            this.scene.sound.play("crit", {volume:0.1});
             this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(this.dmgThisTick)+" !", "aqua", 75, true, "fuchsia"));
         } else {
             this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(this.dmgThisTick)+"", "red", 50));
@@ -197,7 +200,7 @@ export class Projectile extends Phaser.GameObjects.Container {
             this.scene.addHitEffect(new BasicEffect(this.scene, "bad_fire", this.x, this.y-110, 6, 70, false, 0, 0, 1));
             this.dmgThisTick += sm;
             this.critThisTick = true;
-            this.scene.sound.play("bigfire");
+            this.scene.sound.play("bigfire", {volume: 0.5});
         }
     }
 
@@ -275,7 +278,7 @@ export class Projectile extends Phaser.GameObjects.Container {
                 if(this.info.onHit > 0) {
                     let xdmg = 0;
                     xdmg = this.recalculateDamage(mult*this.info.onHit, target);
-                    this.scene.sound.play("onhit");
+                    this.scene.sound.play("onhit", {volume: 0.05});
                     this.scene.addHitEffect(new BasicEffect(this.scene, "blue_sparkle", this.x, this.y, 15, 15, false, 0, (Math.random()*360), 0.5));
                     if(target.takeDamage(xdmg)){
                         this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(xdmg)+"", "blue", 30));    
@@ -307,6 +310,16 @@ export class Projectile extends Phaser.GameObjects.Container {
         r -= mod;
         if(r <= 1) {
             r = 1;
+        }
+        if(target.dmgRes != 0) {
+            r *= target.dmgRes;
+            if(r < 1) {
+                if(Math.random() < r) {
+                    r = 1;
+                } else {
+                    r = 0;
+                }
+            }
         }
         return Math.round(r);
     }

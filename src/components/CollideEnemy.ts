@@ -84,8 +84,8 @@ export class CollideEnemy extends Enemy{
     }
 
     crash(t: Turret){
-        this.scene.sound.play(this.deadSound);
-        this.scene.sound.play("crit");
+        this.scene.sound.play(this.deadSound, {volume:0.25});
+        this.scene.sound.play("crit", {volume:0.15});
         t.takeDamage(this.dmg);
         this.scene.addTextEffect(new TextEffect(this.scene, t.x-30+(Math.random()*60), t.y-50+(Math.random()*100), Math.round(this.dmg)+" !", "aqua", 75, true, "fuchsia"));
         this.scene.addHitEffect(new BasicEffect(this.scene, this.myInfo.dieAnim, this.x, this.y, this.myInfo.explInfo[0], this.myInfo.explInfo[1], false, 0));

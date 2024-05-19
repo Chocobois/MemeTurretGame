@@ -54,7 +54,7 @@ export class TitleScene extends BaseScene {
 		this.containToScreen(this.background);
 		this.foreground = this.add.image(this.CX, this.CY, "title_foreground");
 		this.containToScreen(this.foreground);
-		this.character = this.add.image(this.CX, this.CY, "title_character");
+		this.character = this.add.image(this.CX, this.CY, "turret_image");
 		this.containToScreen(this.character);
 
 		this.background.setVisible(false);
@@ -68,7 +68,7 @@ export class TitleScene extends BaseScene {
 			y: 0.7 * this.H,
 			size: 160,
 			color: "#000",
-			text: "Game Title",
+			text: "								Bad Meme Turret Game",
 		});
 		this.title.setOrigin(0.5);
 		this.title.setStroke("#FFF", 8);

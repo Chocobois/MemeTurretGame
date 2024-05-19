@@ -41,6 +41,16 @@ const Data = {
 		bpm: 120,
 		loop: true,
 	},
+	m_boss0: {
+		offset: 0.4,
+		bpm: 120,
+		loop: true,
+	},
+	m_boss1: {
+		offset: 0.4,
+		bpm: 120,
+		loop: true,
+	},
 	m_final2: {
 		offset: 2433184 / 48000,
 		bpm: 140,
@@ -54,6 +64,11 @@ const Data = {
 		loop: true,
 		start: 55.174,
 		end: 271.885,
+	},
+	m_end: {
+		offset: 0.4,
+		bpm: 120,
+		loop: true,
 	},
 };
 

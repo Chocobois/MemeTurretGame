@@ -5,6 +5,7 @@ import { GameScene } from "@/scenes/GameScene";
 import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 import { UpgradeScene } from "./scenes/UpgradeScene";
 import { TransitionScene } from "./scenes/TransitionScene";
+import { EndScene } from "./scenes/EndScene";
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.WEBGL,
@@ -15,7 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
 	scale: {
 		mode: Phaser.Scale.FIT,
 	},
-	scene: [PreloadScene, TitleScene, GameScene, UpgradeScene, TransitionScene],
+	scene: [PreloadScene, TitleScene, GameScene, UpgradeScene, TransitionScene, EndScene],
 
 	plugins: {
 		global: [

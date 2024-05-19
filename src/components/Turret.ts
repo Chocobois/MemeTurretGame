@@ -16,6 +16,7 @@ export class Turret{
 	private baseSprite: Phaser.GameObjects.Sprite;
     private gunSprite: Phaser.GameObjects.Sprite;
 	private tween: Phaser.Tweens.Tween;
+	private keys: any;
 
 	// Controls
 	private keyboard: any;
@@ -48,6 +49,9 @@ export class Turret{
     public health: number = 1000;
 	public maxHealth: number = 1000;
 	public radius: number = 100;
+	public vel: number = 600;
+	public danmaku: boolean = false;
+	public fMove: number = 0;
 
 	constructor(scene: GameScene, x: number, y: number) {
         this.scene = scene;
@@ -56,11 +60,11 @@ export class Turret{
 		this.x = x;
 		this.y = y;
 		this.powerUpInfo = new PowerUpHandler(this.scene);
-		this.turretDisplay = new TurretModel(scene,x,y);
+		this.turretDisplay = new TurretModel(scene,x,y,this);
 		this.defaultParams = {
             baseDamage: 25,
-            critChance: 0, critDmg: 2, critMod: 1,
-            rof: 1.6, acc: 0,
+            critChance: 0, critDmg: 3, critMod: 1,
+            rof: 1.5, acc: 0,
             shotgun: false, shotgunPellets: 0, shotgunDmg: 0,
             pspeed: 1,
             onHit: 0,
@@ -91,16 +95,29 @@ export class Turret{
 		}
 		this.workingParams = this.cloneTurretData(this.defaultParams);
 		this.workingProjectileData = this.defaultProjectileData;
+		this.keys = scene.input.keyboard?.addKeys({
+			up: 'W',		up2: 'Up',
+			down: 'S',		down2: 'Down',
+			left: 'A',		left2: 'Left',
+			right: 'D',		right2: 'Right',
+			shift: 'Shift',
+		});
 	}
 
 	update(d: number) {
 		const pointer = this.scene.input.activePointer;
-
+		if(this.danmaku) {
+			this.processVelocity(this.handleInput(), d);
+		}
+		if(this.fMove > 0) {
+			this.fMove -= d;
+			this.y-=(d/1000)*1000;
+		}
         this.curAngle = Math.atan2((pointer.y-this.y),(pointer.x-this.x));
 		this.turretDisplay.update(d, this.curAngle);
 		if(this.health <= 0) {
 			this.scene.gameData.loseLife();
-			this.scene.sound.play("turret_dead", {volume:0.25});
+			this.scene.sound.play("turret_dead", {volume:0.2});
 			this.health = this.maxHealth;
 		}
 		this.turretDisplay.updateHPDisplay(this.health, this.maxHealth);
@@ -156,7 +173,7 @@ export class Turret{
         let na = angle + ((-1*this.workingParams.acc+(Math.random()*2*this.workingParams.acc))*(Math.PI/180));
         let nx = Math.cos(angle)*this.gunDistance;
         let ny = Math.sin(angle)*this.gunDistance;
-        this.scene.sound.play("machinegun");
+        this.scene.sound.play("machinegun", {volume:0.25});
 		let wps = {
 			velocity: this.defaultProjectileData.velocity*this.workingParams.pspeed,
 			radius: this.defaultProjectileData.radius,
@@ -200,7 +217,7 @@ export class Turret{
 		let lm = angle;
 		let lx = Math.cos(angle);
 		let ly = Math.sin(angle);
-		this.scene.sound.play("missile_sound");
+		this.scene.sound.play("missile_sound", {volume:0.25});
 		let wp = {
 			velocity: this.defaultProjectileData.velocity*1.15*this.workingParams.pspeed,
 			radius: this.defaultProjectileData.radius,
@@ -307,7 +324,14 @@ export class Turret{
 
 	resetScene(scene: GameScene){
 		this.scene = scene;
-		this.turretDisplay = new TurretModel(this.scene,this.x,this.y);
+		this.turretDisplay = new TurretModel(this.scene,this.x,this.y,this);
+		this.keys = scene.input.keyboard?.addKeys({
+			up: 'W',		up2: 'Up',
+			down: 'S',		down2: 'Down',
+			left: 'A',		left2: 'Left',
+			right: 'D',		right2: 'Right',
+			shift: 'Shift',
+		});
 	}
 
     processDamage(){
@@ -316,6 +340,64 @@ export class Turret{
 
 	takeDamage(dmg: number) {
 		this.health -= dmg;
+	}
+
+	handleInput(): number[]{
+		let vec = [0,0];
+		if(this.keys.up.isDown || this.keys.up2.isDown){
+			vec[1] += -1;
+		}
+		if(this.keys.down.isDown || this.keys.down2.isDown){
+			vec[1] += 1;
+		}
+
+		if(this.keys.left.isDown || this.keys.left2.isDown){
+			vec[0] += -1;
+		}
+		if(this.keys.right.isDown || this.keys.right2.isDown){
+			vec[0] += 1;
+		}
+
+		return vec;
+	}
+
+	processVelocity(n: number[], d: number) {
+		let mod = 1;
+		if((n[0] != 0) && (n[1] != 0)){
+			mod = 1/Math.sqrt(2);
+		}
+		if(this.keys.shift.isDown) {
+			mod *= 0.5;
+		}
+		this.x += this.vel*d/1000*mod*n[0];
+		this.y += this.vel*d/1000*mod*n[1];
+		this.processBounds();
+	}
+
+	processBounds(){
+		if(this.x > (1920-this.radius)) {
+			this.x = (1920-this.radius);
+		}
+		if(this.x < (0+this.radius)) {
+			this.x = (0+this.radius);
+		}
+
+		if(this.y > (1080-this.radius)) {
+			this.y = (1080-this.radius);
+		}
+		if(this.y < (0+this.radius)) {
+			this.y = (0+this.radius);
+		}
+		
+	}
+
+	danmakuMode(){
+		this.danmaku = true;
+	}
+
+	danmakuDisplay(){
+		this.radius = 10;
+		this.turretDisplay.danmaku();
 	}
 
 	heal(){
@@ -346,8 +428,6 @@ export class Turret{
 		this.scene.add.existing(this.turretDisplay);
 	}
 
-	handleInput() {
-	}
 
 
 

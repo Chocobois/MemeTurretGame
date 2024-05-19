@@ -12,7 +12,11 @@ export class GlobalVariables{
     public selectedTurret: number;
     public turretsInitialized: boolean = false;
     public currentStage: number = 0;
-    public stageMusic: MusicKey[] = ["m_st1", "m_st2"];
+    public stageMusic: MusicKey[] = ["m_st1", "m_boss0","m_st1" ];
+    public mList: MusicKey[] = ["m_final2","m_final3", "m_st2", "m_st1", "m_boss0", "m_boss1"];
+    public endM: MusicKey = "m_end";
+
+    public bkgLists: string[][] = [["1-0", "1-1", "1-2", "1-3"], ["st0", "st1", "st2", "st3", "st4"]]
     private maxStages: number = 1;
     public seenTransition: boolean = false;
     public gold: number = 0;
@@ -92,6 +96,27 @@ export class GlobalVariables{
 
     public getStageMusic(): MusicKey {
         return this.stageMusic[this.currentStage];
+    }
+
+    public getStageBkg(): string[]{
+       if(this.currentStage < this.bkgLists.length) {
+            return this.bkgLists[this.currentStage];
+       } else {
+            return this.bkgLists[0];
+       }
+    }
+
+    public getEndMusic(): MusicKey {
+        return this.endM;
+    }
+
+    public getMusic(n: number): MusicKey {
+        if(n < this.mList.length) {
+            return this.mList[n];
+        } else{
+            return this.mList[0];
+        }
+
     }
 
     public advanceStage(){

@@ -2,6 +2,7 @@ import { GameScene } from "@/scenes/GameScene";
 import { TextEffect } from "./TextEffect";
 import { BasicEffect } from "./BasicEffect";
 import { Boss } from "./Boss";
+import { TitleEffect } from "./TitleEffect";
 
 interface StageCommand{
 	command: string;
@@ -27,11 +28,9 @@ export class Stage {
         this.stage_1 = [
             {command: "wait", value: [1500]},
             //{command: "endStage", value: [1000]},
-            //{command: "boss", value: [1500, 540, 6]},
-            //{command: "wait", value: [100000000000]},
-            //
+            {command: "wait", value: [1500]},
             {command: "wait", value: [1000]},
-            {command: "spawn", value: [3,5]}, 
+            //{command: "spawn", value: [3,5]}, 
             {command: "wait", value: [2500]}, 
             {command: "spawn", value: [2,0]}, 
             {command: "wait", value: [750]}, 
@@ -95,7 +94,7 @@ export class Stage {
             {command: "wait", value: [4500]}, 
             {command: "spawn", value: [2,1]},
             {command: "wait", value: [3500]}, 
-            {command: "spawn", value: [1,3]},
+            {command: "spawn", value: [1,2]},
             {command: "wait", value: [3500]}, 
             {command: "spawn", value: [1,1]},
             {command: "spawn", value: [1,0]},
@@ -107,58 +106,76 @@ export class Stage {
 
         this.stage_2 = [
             {command: "wait", value: [1500]},
+
             //{command: "endStage", value: [1000]}, 
             {command: "wait", value: [1000]},
-            {command: "spawn", value: [3,3]}, 
+            {command: "spawn", value: [3,3]},
+            {command: "spawn", value: [2,25]},  
             {command: "wait", value: [2500]}, 
-            {command: "spawn", value: [2,0]}, 
+            {command: "spawn", value: [2,24]}, 
             {command: "wait", value: [750]}, 
-            {command: "spawn", value: [1,0]}, 
+            {command: "spawn", value: [2,5]}, 
             {command: "wait", value: [4500]}, 
-            {command: "spawn", value: [2,0]}, 
+            {command: "spawn", value: [2,24]}, 
             {command: "wait", value: [500]}, 
-            {command: "spawn", value: [2,0]}, 
+            {command: "spawn", value: [2,25]}, 
             {command: "wait", value: [5500]}, 
-            {command: "spawn", value: [2,1]},
+            {command: "spawn", value: [2,24]},
+            {command: "spawn", value: [5,25]},
             {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [2,0]},
+            {command: "spawn", value: [3,5]},
             {command: "wait", value: [5000]}, 
-            {command: "spawn", value: [3,1]},
+            {command: "spawn", value: [3,25]},
             {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [1,1]},
-            {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [1,0]},
+            {command: "spawn", value: [1,25]},
+            {command: "wait", value: [1000]},
+            {command: "spawn", value: [5,24]},  
+            {command: "spawn", value: [6,5]},
             {command: "wait", value: [2000]}, 
-            {command: "spawn", value: [1,0]},    
+            {command: "spawn", value: [1,24]},    
             {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [1,1]},
+            {command: "spawn", value: [1,2]},
             {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [2,0]},
+            {command: "spawn", value: [2,24]},
             {command: "wait", value: [1500]}, 
-            {command: "spawn", value: [2,0]},
+            {command: "spawn", value: [2,5]},
             {command: "wait", value: [3000]}, 
-            {command: "spawn", value: [3,0]},
+            {command: "spawn", value: [3,2]},
             {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [1,0]},
+            {command: "spawn", value: [1,24]},
             {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [1,0]},
+            {command: "spawn", value: [1,5]},
+            {command: "spawn", value: [2,24]},
             {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [1,0]},
+            {command: "spawn", value: [1,3]},
             {command: "wait", value: [1500]}, 
-            {command: "spawn", value: [2,0]},
+            {command: "spawn", value: [2,3]},
             {command: "wait", value: [1500]}, 
-            {command: "spawn", value: [1,0]},
+            {command: "spawn", value: [1,2]},
+            {command: "spawn", value: [4,24]},
             {command: "wait", value: [1500]}, 
-            {command: "spawn", value: [1,1]},
+            {command: "spawn", value: [1,25]},
             {command: "wait", value: [1000]}, 
-            {command: "spawn", value: [1,1]},
+            {command: "spawn", value: [1,25]},
+            {command: "spawn", value: [5,24]},
             {command: "wait", value: [2000]}, 
-            {command: "spawn", value: [3,0]},
+            {command: "spawn", value: [3,24]},
             {command: "wait", value: [6000]}, 
-            {command: "spawn", value: [3,1]},
+            {command: "spawn", value: [3,25]},
+            {command: "spawn", value: [10,24]},
             {command: "wait", value: [500]}, 
-            {command: "spawn", value: [1,1]},
-            {command: "wait", value: [500]}, 
+            {command: "spawn", value: [3,25]},
+            {command: "wait", value: [3500]}, 
+            {command: "fadeMusic", value: [2500]},
+            {command: "wait", value: [2500]},
+            {command: "changeMusic", value: [5]},
+            {command: "flash", value: []},
+            {command: "boss", value: [1500, 540, 6]},
+            {command: "wait_enemies", value: [3000]}, 
+            {command: "victory", value: [1500]},
+            {command: "wait", value: [4500]},
+            {command: "fadeMusic", value: [2500]},
+            {command: "fadeBlack", value: []},
             {command: "spawn", value: [1,0]},
             {command: "wait", value: [1000]}, 
             {command: "spawn", value: [4,0]},
@@ -228,6 +245,61 @@ export class Stage {
                     break;
                 }
                 this.scene.addTextEffect(new TextEffect(this.scene, 960, 540, "STAGE COMPLETED", "#FF73C5", 175, true, "#DE3163", 3000, 100, 0, 0));
+                this.currentStep++;
+                if(this.currentStep >= this.stageList[this.currentStage].length) {
+                    this.currentStep = this.stageList[this.currentStage].length-1;
+                    this.pend = true;
+                }
+                break;
+            }   case "victory": {
+                if(this.pend) {
+                    break;
+                }
+                this.scene.addHitEffect(new TitleEffect(this.scene,0,0,"victory"));
+                this.currentStep++;
+                if(this.currentStep >= this.stageList[this.currentStage].length) {
+                    this.currentStep = this.stageList[this.currentStage].length-1;
+                    this.pend = true;
+                }
+                break;
+            }   case "fadeMusic": {
+                if(this.pend) {
+                    break;
+                }
+                this.scene.fadeMusic(2500);
+                this.currentStep++;
+                if(this.currentStep >= this.stageList[this.currentStage].length) {
+                    this.currentStep = this.stageList[this.currentStage].length-1;
+                    this.pend = true;
+                }
+                break;
+            }   case "changeMusic": {
+                if(this.pend) {
+                    break;
+                }
+                this.scene.swapMusic(this.stageList[this.currentStage][this.currentStep].value[0]);
+                this.currentStep++;
+                if(this.currentStep >= this.stageList[this.currentStage].length) {
+                    this.currentStep = this.stageList[this.currentStage].length-1;
+                    this.pend = true;
+                }
+                break;
+            }   case "flash": {
+                if(this.pend) {
+                    break;
+                }
+                this.scene.setFlash(1000);
+                this.currentStep++;
+                if(this.currentStep >= this.stageList[this.currentStage].length) {
+                    this.currentStep = this.stageList[this.currentStage].length-1;
+                    this.pend = true;
+                }
+                break;
+            }   case "fadeBlack": {
+                if(this.pend) {
+                    break;
+                }
+                this.scene.fadeBlack();
                 this.currentStep++;
                 if(this.currentStep >= this.stageList[this.currentStage].length) {
                     this.currentStep = this.stageList[this.currentStage].length-1;
