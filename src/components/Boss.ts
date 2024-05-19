@@ -1006,15 +1006,15 @@ export class Boss extends Enemy {
                // console.log("DPS: " + this.dps);
                 let rd = this.maxdps/this.dps;
                 this.scene.spValue=rd;
-                if(rd > 3) {
-                    rd = 3;
+                if(rd > 2) {
+                    rd = 2;
                 }
                 if(rd < 0.01) {
                     rd = 0.01;
                 }
                 this.dmgRes = rd;
-                if(this.tEl > 20) {
-                    this.dmgRes=1.25;
+                if(this.tEl > 24) {
+                    this.dmgRes=2;
                 }
             }
         }

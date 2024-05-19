@@ -62,8 +62,8 @@ export class Turret{
 		this.powerUpInfo = new PowerUpHandler(this.scene);
 		this.turretDisplay = new TurretModel(scene,x,y,this);
 		this.defaultParams = {
-            baseDamage: 25,
-            critChance: 0, critDmg: 3, critMod: 1,
+            baseDamage: 18,
+            critChance: 0, critDmg: 2.5, critMod: 1,
             rof: 1.5, acc: 0,
             shotgun: false, shotgunPellets: 0, shotgunDmg: 0,
             pspeed: 1,
