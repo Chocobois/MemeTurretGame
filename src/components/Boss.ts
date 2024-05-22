@@ -564,6 +564,7 @@ export class Boss extends Enemy {
             ]),
             new BossCommand(this, [
                 {key: "HPThreshold", value: [0.01], args: [], conditions: []},
+                {key: "HPChange", value: [815000], args: [], conditions: []},
                 {key: "refillHP", value: [], args: [], conditions: []},
                 {key: "nextScript", value: [], args: [], conditions: []},
             ]),
@@ -590,6 +591,7 @@ export class Boss extends Enemy {
         ],
         [
             new BossCommand(this, [
+                {key: "prorate", value: [], args: [], conditions: []},
                 {key: "wait", value: [2500], args: [], conditions: []},
                 {key: "nohit", value: [], args: [], conditions: [false]},
                 {key: "wait", value: [250], args: [], conditions: []},
@@ -606,7 +608,7 @@ export class Boss extends Enemy {
                 {key: "shootCorner", value: [3], args: [], conditions: []},
                 {key: "wait", value: [150], args: [], conditions: []},
                 {key: "wait", value: [6500], args: [], conditions: []},
-                {key: "loop", value: [1], args: [], conditions: []},
+                {key: "loop", value: [2], args: [], conditions: []},
             ]), 
             new BossCommand(this, [
                 {key: "wait", value: [3500], args: [], conditions: []},
