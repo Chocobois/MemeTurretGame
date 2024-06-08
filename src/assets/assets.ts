@@ -50,11 +50,16 @@ const images: Image[] = [
 	image('backgrounds/st3', 'st3'),
 	image('backgrounds/st4', 'st4'),
 
+	image('backgrounds/tt1', 'tt1'),
+	image('backgrounds/tt2', 'tt2'),
+	image('backgrounds/alpha', 'alpha'),
+	image('backgrounds/beta', 'beta'),
+	image('backgrounds/gamma', 'gamma'),
+
 	image('backgrounds/blank_bkg', 'blank_bkg'),
 	image('backgrounds/white_bkg', 'white_bkg'),
 	image('backgrounds/black_bkg', 'black_bkg'),
 	image('backgrounds/vscreen', 'vscreen'),
-
 
 	// Characters
 	image('characters/player', 'player'),
@@ -191,6 +196,7 @@ const audios: Audio[] = [
 	music('first', 'm_first'),
 	music('st1', 'm_st1'),
 	music('st2', 'm_st2'),
+	music('ba1', 'm_ba'),
 	music('final2', 'm_final2'),
 	music('final3', 'm_final3'),
 	music('hokkai', 'm_boss0'),

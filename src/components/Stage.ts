@@ -29,7 +29,7 @@ export class Stage {
             {command: "wait", value: [1500]},
             //{command: "endStage", value: [1000]},
             {command: "wait", value: [1500]},
-            {command: "wait", value: [1000]},
+            //{command: "wait", value: [1000]},
             //{command: "spawn", value: [3,5]}, 
             {command: "wait", value: [2500]}, 
             {command: "spawn", value: [2,0]}, 

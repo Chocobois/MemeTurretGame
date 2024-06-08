@@ -22,6 +22,19 @@ export class TitleScene extends BaseScene {
 	public foreground: Phaser.GameObjects.Image;
 	public character: Phaser.GameObjects.Image;
 
+
+	public a1: Phaser.GameObjects.Image;
+	public b1: Phaser.GameObjects.Image;
+	public c1: Phaser.GameObjects.Image;
+	public tbkg: Phaser.GameObjects.Image;
+	public fscreen: Phaser.GameObjects.Image;
+
+	public initTimer: number = -20;
+	public fTimer: number = -20;
+	public initiated: boolean = false;
+	public placed: boolean = false;
+	public ready: boolean = false;
+
 	public credits: Phaser.GameObjects.Container;
 	public title: Phaser.GameObjects.Text;
 	public subtitle: Phaser.GameObjects.Text;
@@ -52,12 +65,42 @@ export class TitleScene extends BaseScene {
 			"title_background"
 		);
 		this.containToScreen(this.background);
+		this.background.setVisible(false);
 		this.foreground = this.add.image(this.CX, this.CY, "title_foreground");
+		this.foreground.setVisible(false);
 		this.containToScreen(this.foreground);
 		this.character = this.add.image(this.CX, this.CY, "turret_image");
 		this.containToScreen(this.character);
+		this.character.setDepth(7);
+
+		this.a1 = this.add.image(0,650,"alpha");
+		this.a1.setOrigin(0,0);
+		this.a1.setDepth(5);
+		this.a1.setAlpha(0);
+
+		this.b1 = this.add.image(700,0,"beta");
+		this.b1.setOrigin(0,0);
+		this.b1.setDepth(5);
+		this.b1.setAlpha(0);
+
+		this.c1 = this.add.image(0,0,"gamma");
+		this.c1.setOrigin(0,0);
+		this.c1.setDepth(8);
+		this.c1.setVisible(false);
+
+		this.tbkg = this.add.image(0,0,"tt1");
+		this.tbkg.setOrigin(0,0);
+		this.tbkg.setDepth(3);
+		this.fitToScreen(this.tbkg);
+
+		this.fscreen = this.add.image(0,0,"white_bkg");
+		this.fscreen.setOrigin(0,0);
+		this.fscreen.setDepth(9);
+		this.fscreen.setVisible(false);
+		this.fitToScreen(this.fscreen);
 
 		this.background.setVisible(false);
+		this.background.setDepth(-5);
 		this.background.setAlpha(0);
 		this.background.y += 4000;
 		this.foreground.y += 1000;
@@ -68,7 +111,7 @@ export class TitleScene extends BaseScene {
 			y: 0.7 * this.H,
 			size: 160,
 			color: "#000",
-			text: "								Bad Meme Turret Game",
+			text: "",
 		});
 		this.title.setOrigin(0.5);
 		this.title.setStroke("#FFF", 8);
@@ -88,6 +131,8 @@ export class TitleScene extends BaseScene {
 		this.subtitle.setPadding(2);
 		this.subtitle.setVisible(false);
 		this.subtitle.setAlpha(0);
+		this.subtitle.setDepth(8);
+		this.subtitle.setY(-1000);
 
 		this.tap = this.addText({
 			x: this.CX,
@@ -171,12 +216,13 @@ export class TitleScene extends BaseScene {
 
 	update(time: number, delta: number) {
 		if (this.background.visible) {
+
 			this.background.y += 0.02 * (this.CY - this.background.y);
 			this.foreground.y += 0.025 * (this.CY - this.foreground.y);
 			this.character.y += 0.02 * (this.CY - this.character.y);
 
 			this.background.alpha += 0.03 * (1 - this.background.alpha);
-			this.character.scaleX = Math.sin((3 * time) / 1000);
+			this.character.scaleX = 1.5*Math.sin((3 * time) / 1000);
 
 			this.title.alpha +=
 				0.02 * ((this.title.visible ? 1 : 0) - this.title.alpha);
@@ -185,16 +231,73 @@ export class TitleScene extends BaseScene {
 			this.version.alpha +=
 				0.02 * ((this.version.visible ? 1 : 0) - this.version.alpha);
 
+			if(this.subtitle.alpha > 0.5) {
+				if(!this.initiated) {
+					this.initTimer = 750;
+					this.initiated = true;
+				}
+			}
 			if (this.credits.visible) {
 				this.credits.alpha += 0.02 * (1 - this.credits.alpha);
 			}
 		} else {
 			this.tap.alpha += 0.01 * (1 - this.tap.alpha);
-
 			if (this.musicTitle.seek > 0) {
 				this.background.setVisible(true);
 				this.tap.setVisible(false);
 			}
+		}
+
+		if(this.placed && (this.fTimer > 0)) {
+			this.fTimer -= delta;
+			if(this.fTimer <= 0) {
+				this.fTimer = 0;
+				this.fscreen.setAlpha(0);
+				this.fscreen.setVisible(false);
+			} else {
+				this.fscreen.setAlpha(this.fTimer/500);
+			}
+			if(this.fTimer < 150) {
+				if(!this.ready) {
+					this.ready = true;
+				}
+			}
+		}
+
+		if(this.placed) {
+			this.c1.y = -30+(30*Math.sin(time/800));
+		}
+
+		if(this.initiated && (this.initTimer > 0)) {
+			this.initTimer -= delta;
+
+			if(this.initTimer < 200) {
+				if(!this.placed) {
+					this.placed = true;
+					this.fTimer = 500;
+					this.fscreen.setVisible(true);
+					this.c1.setVisible(true);
+					this.tbkg.setTexture("tt2");
+					this.subtitle.setY(0.87 * this.H);
+					this.musicTitle.stop();
+					this.musicTitle = new Music(this, "m_ba", { volume: 0.2 });
+					this.musicTitle.play();
+				}
+			}
+
+			if(this.initTimer <= 0){
+				this.initTimer = 0;
+				this.a1.y = 0;
+				this.b1.x = 0;
+				this.a1.setAlpha(1);
+				this.b1.setAlpha(1);
+			} else {
+				this.a1.y=650*(this.initTimer/750);
+				this.b1.x=700*(this.initTimer/750);
+				this.a1.setAlpha(1-(this.initTimer/750));
+				this.b1.setAlpha(1-(this.initTimer/750));
+			}
+
 		}
 
 		this.subtitle.setScale(1 + 0.02 * Math.sin((5 * time) / 1000));
@@ -205,6 +308,9 @@ export class TitleScene extends BaseScene {
 	}
 
 	progress() {
+		if(!this.ready) {
+			return;
+		}
 		if (!this.background.visible) {
 			this.onBar(1);
 		} else if (!this.subtitle.visible) {

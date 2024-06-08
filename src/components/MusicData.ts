@@ -70,6 +70,11 @@ const Data = {
 		bpm: 120,
 		loop: true,
 	},
+	m_ba: {
+		offset: 0,
+		bpm: 100,
+		loop: true,
+	},
 };
 
 export type MusicKey = keyof typeof Data;
