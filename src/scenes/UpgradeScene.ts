@@ -448,7 +448,7 @@ export class UpgradeScene extends BaseScene {
 		}
 		this.dataHandler.returnWidget(index);
 		if(this.dataHandler.myWidgets[index][2] < this.dataHandler.myWidgets[index][1]){
-			if(this.currentWidgetButton.veiled) {
+			if(this.currentWidgetButton.veiled && (this.currentIndex == index)) {
 				this.currentWidgetButton.unveil();
 			}
 		}
