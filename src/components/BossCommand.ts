@@ -939,6 +939,13 @@ export class BossCommand
                 this.owner.scene.gameData.lives = 99;
                 this.advance();
                 break;
+            }  case "resist": {
+                if(this.pend) {
+                    break;
+                }
+                this.owner.flatRes = this.cmd[this.step].value[0];
+                this.advance();
+                break;
             }  case "shatter": {
                 if(this.pend) {
                     break;

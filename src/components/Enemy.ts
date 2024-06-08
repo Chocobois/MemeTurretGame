@@ -59,6 +59,7 @@ export class Enemy extends Phaser.GameObjects.Container {
     private static HITBOX: number = 1;
     private static HITCIRCLE: number = 0;
     public dmgRes: number = 1;
+    public flatRes: number = 1;
 
     public boxHeight: number = 0;
     public boxWidth: number = 0;

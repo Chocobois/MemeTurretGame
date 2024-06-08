@@ -3,7 +3,7 @@ import { GameScene } from "@/scenes/GameScene";
 import { EnemyBulletParam } from "./EnemyProjectile";
 
 export class ExpandingProjectile extends EnemyProjectile{
-    private txTimer: number[] = [500,500];
+    private txTimer: number[] = [750,750];
     public bxType: number = 0;
     private i2: EnemyBulletParam;
     constructor(scene: GameScene, x: number, y: number, angle: number, info: EnemyBulletParam, shouldPierce: boolean = false, collider = false, info2: EnemyBulletParam) {

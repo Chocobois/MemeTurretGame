@@ -313,6 +313,7 @@ export class Projectile extends Phaser.GameObjects.Container {
         }
         if(target.dmgRes != 0) {
             r *= target.dmgRes;
+            r *= target.flatRes;
             if(r < 1) {
                 if(Math.random() < r) {
                     r = 1;
