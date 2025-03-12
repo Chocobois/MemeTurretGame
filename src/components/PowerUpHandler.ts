@@ -363,8 +363,8 @@ export class PowerUpHandler{
             } case powerID.SQUARED_DMG: { //RAINBOW
                 this.currentIterations = this.widgetTable[n].iterations;
                 this.checkForward();
-                this.workingParam.baseDamage += this.currentIterations*Math.pow(this.baseDamage,2);
-                this.workingParam.missileCount += this.currentIterations*Math.pow(this.workingParam.missileCount,2);
+                this.workingParam.baseDamage += Math.pow(this.baseDamage+this.currentIterations,2);
+                this.workingParam.missileCount += Math.pow(this.workingParam.missileCount+this.currentIterations,2);
                 break;
             } case powerID.SMITE: {
                 this.currentIterations = this.widgetTable[n].iterations;
