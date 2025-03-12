@@ -21,6 +21,7 @@ export interface TurretParams{
     useScaling: boolean, scalingFactor: number; scalingAmount: number;
     flak: boolean; flakAmount: number; flakPierce: number;
     burst: boolean; burstAmount: number;
+    onhitchain: boolean; onhitchainchance: number;
 
 }
 export enum powerID {
@@ -107,6 +108,7 @@ export class PowerUpHandler{
             useScaling: false, scalingFactor: 1000000, scalingAmount: 0,
             flak: false, flakAmount: 0, flakPierce: 3,
             burst: false, burstAmount: 1,
+            onhitchain: false, onhitchainchance: 0,
         
         };
 
@@ -128,6 +130,7 @@ export class PowerUpHandler{
             useScaling: false, scalingFactor: 1000000, scalingAmount: 0,
             flak: false, flakAmount: 0, flakPierce: 3,
             burst: false, burstAmount: 1,
+            onhitchain: false, onhitchainchance: 0,
         };
         //[base damage, critical chance, critical damage, on-hit damage, ]
     }
@@ -363,8 +366,11 @@ export class PowerUpHandler{
             } case powerID.SQUARED_DMG: { //RAINBOW
                 this.currentIterations = this.widgetTable[n].iterations;
                 this.checkForward();
-                this.workingParam.baseDamage += Math.pow(this.baseDamage+this.currentIterations,2);
-                this.workingParam.missileCount += Math.pow(this.workingParam.missileCount+this.currentIterations,2);
+                this.workingParam.baseDamage += Math.pow(this.baseDamage+(this.currentIterations-1),2);
+                this.workingParam.missileCount += Math.pow(this.workingParam.missileCount+(this.currentIterations-1),2);
+
+                this.workingParam.onhitchain = true;
+                this.workingParam.onhitchainchance += 0.1*this.currentIterations;
                 break;
             } case powerID.SMITE: {
                 this.currentIterations = this.widgetTable[n].iterations;
