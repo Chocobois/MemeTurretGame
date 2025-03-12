@@ -79,6 +79,7 @@ export class Turret{
             useScaling: false, scalingFactor: 1000000, scalingAmount: 0,
 			flak: false, flakAmount: 0, flakPierce: 3,
 			burst: false, burstAmount: 1,
+			onhitchain: false, onhitchainchance: 0,
         
         };
 		this.defaultProjectileData = {
@@ -278,6 +279,7 @@ export class Turret{
             useScaling: t.useScaling, scalingFactor: t.scalingFactor, scalingAmount: t.scalingAmount,
 			flak: t.flak, flakAmount: t.flakAmount, flakPierce: t.flakPierce,
 			burst: t.burst, burstAmount: t.burstAmount,
+			onhitchain: t.onhitchain, onhitchainchance: t.onhitchainchance,
         };
 	}
 	

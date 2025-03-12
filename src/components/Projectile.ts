@@ -383,7 +383,8 @@ export class Projectile extends Phaser.GameObjects.Container {
             missiles: t.missiles, missileCount: t.missileCount, missileDmg: t.missileDmg, missileCharge: t.missileCharge,
             useScaling: t.useScaling, scalingFactor: t.scalingFactor, scalingAmount: t.scalingAmount,
             flak: t.flak, flakAmount: t.flakAmount, flakPierce: t.flakPierce,
-            burst: t.burst, burstAmount: t.burstAmount
+            burst: t.burst, burstAmount: t.burstAmount,
+            onhitchain: t.onhitchain, onhitchainchance: t.onhitchainchance,
         };
 	}
 
