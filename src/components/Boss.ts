@@ -41,6 +41,9 @@ export class Boss extends Enemy {
     public maxdps: number = 6000;
     public dps: number = 0;
     public prr: boolean = false;
+    public bleed: boolean = false;
+    public bleedTimer: number = 0;
+    public bleedAmount: number = 0;
     
     constructor(scene: GameScene, x: number, y: number, type: number = 0) {
         super(scene, x, y, type);
@@ -592,7 +595,7 @@ export class Boss extends Enemy {
         [
             new BossCommand(this, [
                 {key: "prorate", value: [], args: [], conditions: []},
-                {key: "wait", value: [2500], args: [], conditions: []},
+                {key: "wait", value: [2000], args: [], conditions: []},
                 {key: "nohit", value: [], args: [], conditions: [false]},
                 {key: "wait", value: [250], args: [], conditions: []},
                 {key: "sound", value: [0.25], args: ["shot-1"], conditions: []},
@@ -607,11 +610,11 @@ export class Boss extends Enemy {
                 {key: "sound", value: [0.25], args: ["shot-1"], conditions: []},
                 {key: "shootCorner", value: [3], args: [], conditions: []},
                 {key: "wait", value: [150], args: [], conditions: []},
-                {key: "wait", value: [6500], args: [], conditions: []},
+                {key: "wait", value: [4000], args: [], conditions: []},
                 {key: "loop", value: [2], args: [], conditions: []},
             ]), 
             new BossCommand(this, [
-                {key: "wait", value: [3500], args: [], conditions: []},
+                {key: "wait", value: [2500], args: [], conditions: []},
                 {key: "wait", value: [250], args: [], conditions: []},
                 {key: "sound", value: [0.4], args: ["thshoot"], conditions: []},
                 {key: "shootRockBlast", value: [0], args: [], conditions: []},
@@ -619,7 +622,7 @@ export class Boss extends Enemy {
                 {key: "wait", value: [250], args: [], conditions: []},
                 {key: "sound", value: [0.4], args: ["thshoot"], conditions: []},
                 {key: "shootRockBlast", value: [0], args: [], conditions: []},
-                {key: "wait", value: [4600], args: [], conditions: []},
+                {key: "wait", value: [3600], args: [], conditions: []},
                 {key: "loop", value: [1], args: [], conditions: []},
             ]), 
             new BossCommand(this, [
@@ -1016,8 +1019,17 @@ export class Boss extends Enemy {
                     rd = 0.01;
                 }
                 this.dmgRes = rd;
-                if(this.tEl > 24) {
+
+                if(this.tEl > 30) {
                     this.dmgRes=2;
+                    if(!this.bleedParams[0]) {
+                        this.bleedParams = [true,true];
+                        this.bleedValue = [this.health/50,0,500];
+                    }
+                }
+
+                if(this.tEl > 24) {
+                    this.dmgRes=1.75;
                 }
             }
         }
@@ -1072,6 +1084,8 @@ export class Boss extends Enemy {
         this.dps = 0;
         this.tEl = 0;
         this.dmgRes = 1;
+        this.bleedParams = [false,false];
+        this.bleedValue = [0,0,500];
     }
 
     updateSpawnCheck(): void {

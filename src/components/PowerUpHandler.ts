@@ -142,7 +142,7 @@ export class PowerUpHandler{
 
         this.powerUpTable.set(powerID.PLAIN_RED, [0]);
         this.powerUpTable.set(powerID.SHOTGUN, [2, 0.3]); //number of pellets, damage %
-        this.powerUpTable.set(powerID.ONHIT_DMG, [20]);
+        this.powerUpTable.set(powerID.ONHIT_DMG, [30]);
         this.powerUpTable.set(powerID.CHAIN_CRIT, [0.30]);
         this.powerUpTable.set(powerID.ARMOR_PEN, [0.6, 3]); //percent, flat
 
@@ -364,6 +364,7 @@ export class PowerUpHandler{
                 this.currentIterations = this.widgetTable[n].iterations;
                 this.checkForward();
                 this.workingParam.baseDamage += this.currentIterations*Math.pow(this.baseDamage,2);
+                this.workingParam.missileCount += this.currentIterations*Math.pow(this.workingParam.missileCount,2);
                 break;
             } case powerID.SMITE: {
                 this.currentIterations = this.widgetTable[n].iterations;

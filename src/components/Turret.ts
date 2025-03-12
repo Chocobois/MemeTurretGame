@@ -219,7 +219,7 @@ export class Turret{
 		let ly = Math.sin(angle);
 		this.scene.sound.play("missile_sound", {volume:0.25});
 		let wp = {
-			velocity: this.defaultProjectileData.velocity*1.15*this.workingParams.pspeed,
+			velocity: this.defaultProjectileData.velocity*(0.85+(Math.random()*(0.6)))*this.workingParams.pspeed,
 			radius: this.defaultProjectileData.radius,
 			pID: this.scene.getProjID(),
 			duration: this.defaultProjectileData.duration,
@@ -240,6 +240,7 @@ export class Turret{
 			lm = angle + ((-10+(Math.random()*20))*Math.PI/180);
 			this.workingProjectileData.pID = this.scene.getProjID();
 			this.scene.addProjectile(new Projectile(this.scene, this.x+(128*lx), this.y+(128*ly), lm,  this.cloneProjectileData(wp), this.cloneTurretData(wx)));
+			wp.velocity = this.defaultProjectileData.velocity*(0.85+(Math.random()*(0.6)))*this.workingParams.pspeed;
 		}
 	}
 

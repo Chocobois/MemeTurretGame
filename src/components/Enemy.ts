@@ -60,7 +60,8 @@ export class Enemy extends Phaser.GameObjects.Container {
     private static HITCIRCLE: number = 0;
     public dmgRes: number = 1;
     public flatRes: number = 1;
-
+    public bleedParams: boolean[] = [false,false];
+    public bleedValue: number[] = [0,0,500];
     public boxHeight: number = 0;
     public boxWidth: number = 0;
     public hitMode: number = 0;
@@ -195,7 +196,7 @@ export class Enemy extends Phaser.GameObjects.Container {
             damage: 6666,
             sprite: "curse_rock",
             duration: 20000,
-            radius: 240,
+            radius: 110,
             critChance: 1,
             critDmg: 1.0,
             useBox: false, boxParams: [96,36],
@@ -231,7 +232,7 @@ export class Enemy extends Phaser.GameObjects.Container {
             damage: 1337,
             sprite: "ruby",
             duration: 20000,
-            radius: 55,
+            radius: 42,
             critChance: 1,
             critDmg: 1.0,
             useBox: false, boxParams: [96,36],
@@ -243,7 +244,7 @@ export class Enemy extends Phaser.GameObjects.Container {
             damage: 1337,
             sprite: "emerald",
             duration: 20000,
-            radius: 55,
+            radius: 42,
             critChance: 1,
             critDmg: 1.0,
             useBox: false, boxParams: [96,36],
@@ -255,7 +256,7 @@ export class Enemy extends Phaser.GameObjects.Container {
             damage: 1337,
             sprite: "diamond",
             duration: 20000,
-            radius: 55,
+            radius: 42,
             critChance: 1,
             critDmg: 1.0,
             useBox: false, boxParams: [96,36],
@@ -267,7 +268,7 @@ export class Enemy extends Phaser.GameObjects.Container {
             damage: 6666,
             sprite: "small_curse_rock",
             duration: 20000,
-            radius: 110,
+            radius: 98,
             critChance: 1,
             critDmg: 1.0,
             useBox: false, boxParams: [96,36],

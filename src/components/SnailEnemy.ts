@@ -18,6 +18,7 @@ export class SnailEnemy extends Enemy{
         this.velocity[1] = this.myInfo.vy;
         this.setAngle(Math.random()*360);
         this.rvel = 120+Math.random()*240;
+        this.unSmited = false;
 
     }
 

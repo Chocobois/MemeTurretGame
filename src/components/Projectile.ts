@@ -322,6 +322,14 @@ export class Projectile extends Phaser.GameObjects.Container {
                 }
             }
         }
+
+        if(target.bleedParams[0] && target.bleedParams[1]) {
+            r += Math.round(target.bleedValue[0]);
+            target.bleedParams[1] = false;
+            target.bleedValue[1] = target.bleedValue[2];
+            this.critThisTick = true;
+        }
+
         return Math.round(r);
     }
 
