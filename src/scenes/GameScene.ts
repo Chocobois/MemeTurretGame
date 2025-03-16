@@ -69,9 +69,11 @@ export class GameScene extends BaseScene {
 	private fTimer: number =0;
 	private wTimer: number =0;
 	private rTimer: number =0;
-	private cutIndex:number =0;
+	private cutIndex:number = 0;
 	private fiTimer: number = 0;
 	private foTimer: number = 0;
+
+	public curKills: number = 0;
 
 	private flt: number[] = [0,0];
 	private fltDisp: Phaser.GameObjects.Image;
@@ -156,7 +158,7 @@ export class GameScene extends BaseScene {
 		this.ui.setDepth(-3);
 		this.ui.setAlpha(0.8);
 		//this.sound.play("siren");
-
+		this.curKills = 0;
 		this.initTouchControls();
 	}
 
@@ -677,7 +679,18 @@ export class GameScene extends BaseScene {
 		
 	}
 
+	setReqWidget(n: number){
+		this.gameData.nextReqWidget = n;
+	}
+
+	trackEnemyKill(){
+		this.curKills++;
+		this.gameData.updateKills(1);
+	}
+
 	endStage(){
+		//this.gameData.restoreAllLives(); not needed since restored in turret when calculating bingos
+		this.activeTurret.health = this.activeTurret.maxHealth;
 		this.gameData.advanceStage();
 		this.stageMusic.stop();
 		if(!this.gameData.seenTransition) {

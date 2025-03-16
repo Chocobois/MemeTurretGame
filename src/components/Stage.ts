@@ -27,6 +27,7 @@ export class Stage {
         this.currentStep = 0;
         this.stage_1 = [
             {command: "wait", value: [1500]},
+            {command: "setReqWidget", value: [22]},
             //{command: "endStage", value: [1000]},
             {command: "wait", value: [1500]},
             //{command: "wait", value: [1000]},
@@ -99,6 +100,7 @@ export class Stage {
             {command: "spawn", value: [1,1]},
             {command: "spawn", value: [1,0]},
             {command: "wait_enemies", value: [3000]}, 
+            {command: "setReqWidget", value: [22]},
             {command: "announce", value: [3000]}, 
             {command: "wait", value: [3500]}, 
             {command: "endStage", value: [1000]},
@@ -300,6 +302,17 @@ export class Stage {
                     break;
                 }
                 this.scene.fadeBlack();
+                this.currentStep++;
+                if(this.currentStep >= this.stageList[this.currentStage].length) {
+                    this.currentStep = this.stageList[this.currentStage].length-1;
+                    this.pend = true;
+                }
+                break;
+            }   case "setReqWidget": {
+                if(this.pend) {
+                    break;
+                }
+                this.scene.setReqWidget(this.stageList[this.currentStage][this.currentStep].value[0]);
                 this.currentStep++;
                 if(this.currentStep >= this.stageList[this.currentStage].length) {
                     this.currentStep = this.stageList[this.currentStage].length-1;

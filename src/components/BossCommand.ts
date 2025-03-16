@@ -1020,6 +1020,20 @@ export class BossCommand
                 this.owner.stopProrate();
                 this.advance();
                 break;
+            }  case "dmgres": {
+                if(this.pend) {
+                    break;
+                }
+                this.owner.lockRes = (this.cmd[this.step].value[0]);
+                this.advance();
+                break;
+            }  case "resetbleed": {
+                if(this.pend) {
+                    break;
+                }
+                this.owner.recalcBleed(this.cmd[this.step].value[0],this.cmd[this.step].value[1]);
+                this.advance();
+                break;
             }  case "danmakuMode": {
                 if(this.pend) {
                     break;

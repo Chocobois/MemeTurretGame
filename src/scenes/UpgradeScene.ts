@@ -49,6 +49,7 @@ export class UpgradeScene extends BaseScene {
 	private wTimer: number = 2500;
 	private bingoStates: boolean[];
 
+	private alertText: Phaser.GameObjects.Text;
 	private titleText: Phaser.GameObjects.Text;
 	private descriptionText: Phaser.GameObjects.Text;
 	private bingoText: Phaser.GameObjects.Text;
@@ -59,6 +60,8 @@ export class UpgradeScene extends BaseScene {
 	private rainbowBingoText: Phaser.GameObjects.Text;
 	private effectsDisplay: Phaser.GameObjects.Container;
 	private buttonTimer: number;
+	public requireWidget: number = -1;
+	private flashTimer: number = 0;
 
 
     public descriptions: string[][] = [
@@ -89,7 +92,7 @@ export class UpgradeScene extends BaseScene {
         ["+G", "The favorite widget of dragons. Increases all the gold you get by a flat amount!", "Avarice Widget"], 
         ["->G", "This widget gives you a little bit of gold when you damage enemies. Even pennies can make you rich!", "Microtransaction Widget"],
         //rainbow
-        ["P^2", "Increases your base damage by the squared amount. Stacks additively. The strongest widget out there!", "Superpower Widget"],
+        ["P^2", "Squares your base damage and enhances other damaging effects! One of a kind, the strongest widget out there!", "Superpower Widget"],
         ["!", "This ferocious widget makes the first hit on an enemy smites it for a percent of its current health. The damage ignores all damage modifiers, including armor! A specialty of dragons!", "Draconic Widget"],
         ["+M", "A widget that gives you a burst of missiles every few shots! Reduce everything to rubble!", "Macross Widget"],
         ["0w0", "This widget gives you a small damage boost. It's not very strong but it will grow in power throughout the whole game!", "Strangely Attractive Widget"],
@@ -150,6 +153,18 @@ export class UpgradeScene extends BaseScene {
 		this.backButton.hide();
 		this.add.existing(this.forwardButton);
 		this.widgetDisplay.add(this.backButton);
+
+		this.requireWidget = this.dataHandler.nextReqWidget;
+
+		this.alertText = this.addText({
+			x: 960,
+			y: 546,
+			size: 80,
+			color: "#FFFFFF",
+			text: "",
+		});
+		this.alertText.setOrigin(0.5,0.5);
+		this.alertText.setDepth(10000);
 		this.titleText = this.addText({
 			x: 1400,
 			y: 586,
@@ -244,11 +259,24 @@ export class UpgradeScene extends BaseScene {
 		//this.ui.update(time, delta);
         const pointer = this.input.activePointer;
 		//this.debugText.setText("CURRENT INDEX: " +this.currentIndex + " ; " + this.findNextIndex());
-
+		if(Math.sin(time/50) > 0){
+			this.alertText.setColor("#FF0000");
+		} else {
+			this.alertText.setColor("#FFFF00");
+		}
 		if(this.wTimer > 0) {
 			this.wTimer -= delta;
 			if(this.wTimer <= 0) {
 				this.wTimer = 2500;
+			}
+		}
+		if(this.flashTimer > 0){
+			this.flashTimer -= delta;
+			if(this.flashTimer <= 0){
+				this.flashTimer = 0;
+				this.alertText.setText("");
+			} else {
+				this.alertText.setAlpha(this.flashTimer/1000);
 			}
 		}
 		if(this.buttonTimer > 0) {
@@ -460,8 +488,49 @@ export class UpgradeScene extends BaseScene {
 		this.dataHandler.applyTable(this.powerBoard);
 	}
 
+	checkReqs(): boolean{
+
+		if((this.requireWidget >= 0) && (this.requireWidget < this.descriptions.length)){
+			//if(this.pHandler.)
+			let rx = false;
+			for(let nn = 0; nn < this.powerBoard.length; nn++){
+				if(this.powerBoard[nn] != null){
+					if(this.powerBoard[nn].pType == this.requireWidget){
+						//console.log("REQUIRED WIDGET PRESENT: " + this.requireWidget);
+						rx = true;
+					}
+				}
+			}
+			//console.log("REQUIRED WIDGET NOT PRESENT: " + this.requireWidget);
+			return rx;
+		} else {
+			//console.log("NO WIDGET REQUIRED / OOB");
+			return true;
+		}
+
+	}
+
+	flash(){
+		if((this.requireWidget >= 0) && (this.requireWidget < this.descriptions.length)){
+			this.flashTimer = 1000;
+			this.alertText.setText("REQUIRED: " + this.descriptions[this.requireWidget][2] + "!");
+		} else {
+			this.flashTimer = 0;
+			this.requireWidget = -1;
+		}
+
+	}
+
 	nextScene(): void{
-		this.endStage();
+		
+		if(this.checkReqs()){
+			this.dataHandler.nextReqWidget = -1;
+			this.requireWidget = -1;
+			this.endStage();
+		} else {
+			this.flash();
+		}
+
 	}
 
 	endStage(){
@@ -497,7 +566,7 @@ export class UpgradeScene extends BaseScene {
 		v = this.bingoMap.get(pColor.RED)!
 		if(v > 0)
 		{
-			this.redBingoText.setText(" Red Bingo x " + v + " : + " + Math.round(100*(v*0.3)) + " % crit damage!");
+			this.redBingoText.setText(" Red Bingo x " + v + " : + " + Math.round(100*(v*0.15)) + " % crit damage!");
 			this.bingoStates[1] = true;
 		} else {
 			this.redBingoText.setText("");

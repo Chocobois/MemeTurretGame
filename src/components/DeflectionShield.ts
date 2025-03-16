@@ -11,6 +11,8 @@ export class DeflectionShield extends Enemy{
     private projInfo: EnemyBulletParam;
     public sOwner: Enemy;
     public sOffset: number[];
+    private reflectedThisTick: boolean = false;
+    private tEl: number = 0;
     constructor(scene: GameScene, x: number, y: number, parent: Enemy, offset: number[] = [0,0], type: number = 12, bulletType: number = 0) {
         super(scene,x,y,type);
         this.sOwner = parent;
@@ -27,6 +29,7 @@ export class DeflectionShield extends Enemy{
 
     update(d: number, t: number){
         super.update(d,t);
+        this.tEl += d;
         this.x = this.sOwner.x+this.sOffset[0];
         this.y = this.sOwner.y+this.sOffset[1];
         if(this.dTimer > 0) {
@@ -43,6 +46,13 @@ export class DeflectionShield extends Enemy{
                 }
             }
         }
+        if(this.reflectedThisTick) {
+            this.reflectBullet();
+            this.reflectedThisTick = false;
+        }
+        if(this.tEl > 12500) {
+            this.die();
+        }
     }
 
     reflectBullet(){
@@ -54,7 +64,7 @@ export class DeflectionShield extends Enemy{
 
     takeDamage(dmg: number): boolean{
         if(this.isReflecting) {
-            this.reflectBullet();
+            this.reflectedThisTick = true;
             return false;
         }
         if(this.deleteFlag || this.noHitCheck) {
@@ -70,7 +80,7 @@ export class DeflectionShield extends Enemy{
 
     takePierceDamage(dmg: number, pID: number, pierceCD: number): boolean {
         if(this.isReflecting) {
-            this.reflectBullet();
+            this.reflectedThisTick = true;
             return false;
         }
         if(this.deleteFlag || this.noHitCheck){

@@ -30,6 +30,7 @@ export class Projectile extends Phaser.GameObjects.Container {
     public angle: number;
     public pTimer: number = 0;
     public pCount: number = -1;
+    private onHitThisTick: number = 0;
     private hitThisTick: boolean = false;
     private critThisTick: boolean = false;
     private dmgThisTick: number = 0;
@@ -67,6 +68,7 @@ export class Projectile extends Phaser.GameObjects.Container {
         this.duration -= d;
         this.hitThisTick = false;
         this.critThisTick = false;
+        this.onHitThisTick = 0;
         this.dmgThisTick = 0;
 
         if(this.explosionCD > 0){
@@ -120,6 +122,21 @@ export class Projectile extends Phaser.GameObjects.Container {
         } else {
             this.scene.sound.play("hit_1", {volume:0.2});
         }
+        if(this.onHitThisTick > 0){
+            switch(this.onHitThisTick){
+                case 1: {
+                    this.scene.sound.play("onhit", {volume: 0.5});
+                    break;
+                } case 2: {
+                    this.scene.sound.play("onhitdouble", {volume: 0.5});
+                    break;
+                } case 3: {
+                    this.scene.sound.play("onhittriple", {volume: 0.5});
+                    this.scene.sound.play("crit", {volume:0.1});
+                    break;
+                }
+            }
+        }
         if(this.critThisTick) {
             this.scene.sound.play("crit", {volume:0.1});
             this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(this.dmgThisTick)+" !", "aqua", 75, true, "fuchsia"));
@@ -154,7 +171,7 @@ export class Projectile extends Phaser.GameObjects.Container {
         pdr.duration = 225;
         pdr.radius = 75;
         pdr.sprite = "blank";
-        pdr.onHitDisabled = true;
+        pdr.onHitDisabled = false;
         pdr.critDisabled = true;
 
         for (let ii = 0; ii < this.info.explCount; ii++){
@@ -233,12 +250,13 @@ export class Projectile extends Phaser.GameObjects.Container {
                     this.pCount--;
                 }
                 this.hitThisTick = true;
-                this.scene.addHitEffect(new BasicEffect(this.scene, "hit_spark", this.x, this.y, 3, 50, false, 0, Math.random()*360, 1));
                 if(this.pCount == 0) {
                     this.deleteFlag = true;
                 }
                 if(target.takePierceDamage(ddmg, this.physics.pID, this.pTimer)) {
                     this.dmgThisTick += ddmg;
+                    this.applyOnHit(mult,target);
+                    this.scene.addHitEffect(new BasicEffect(this.scene, "hit_spark", this.x, this.y, 3, 50, false, 0, Math.random()*360, 1));
                 }
             } else if (this.physics.isMissile) {
                 if(target.collidedWithMissile)
@@ -261,42 +279,71 @@ export class Projectile extends Phaser.GameObjects.Container {
                 pd.duration = 225;
                 pd.radius = 75;
                 pd.sprite = "blank";
-                pd.onHitDisabled = true;
+                pd.onHitDisabled = false;
                 this.hitThisTick = true;
                 this.scene.addProjectile(new Projectile(this.scene, this.x, this.y, 0, pd, pinf));
                 this.deleteFlag = true;
             } else {
                 ddmg = this.recalculateDamage(mult*this.physics.modifier*this.info.baseDamage, target);
-                this.scene.addHitEffect(new BasicEffect(this.scene, "hit_spark", this.x, this.y, 3, 50, false, 0, 0, 1));
                 this.hitThisTick = true;
                 if(target.takeDamage(ddmg)){
                     this.dmgThisTick += ddmg;
+                    this.applyOnHit(mult,target);
+                    this.scene.addHitEffect(new BasicEffect(this.scene, "hit_spark", this.x, this.y, 3, 50, false, 0, 0, 1));
                 }
                 this.deleteFlag = true;
             }
-            if(!this.physics.onHitDisabled) {
-                if(this.info.onHit > 0) {
-                    let xdmg = 0;
-                    xdmg = this.recalculateDamage(mult*this.info.onHit, target);
-                    this.scene.sound.play("onhit", {volume: 0.05});
+
+        }
+    }
+
+    applyOnHit(mult:number, target:Enemy){
+        if(!this.physics.onHitDisabled) {
+            if(this.info.onHit > 0) {
+                let xdmg = 0;
+                xdmg = this.recalculateDamage(mult*this.info.onHit, target);
+                if(target.takeDamage(xdmg)){
+                    this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(xdmg)+"", "blue", 30));
                     this.scene.addHitEffect(new BasicEffect(this.scene, "blue_sparkle", this.x, this.y, 15, 15, false, 0, (Math.random()*360), 0.5));
+                    this.onHitThisTick = 1;
+                }
+                if(this.info.onhitchain) {
+                    xdmg = this.recalculateDamage(mult*this.info.onHit*3, target);
                     if(target.takeDamage(xdmg)){
-                        this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(xdmg)+"", "blue", 30));    
+                        this.scene.addTextEffect(new TextEffect(this.scene, this.x-30+(Math.random()*60), this.y-50+(Math.random()*100), Math.round(xdmg)+"", "blue", 35));
+                        this.onHitThisTick = 2;    
+                    }
+
+                    if(Math.random() < this.info.onhitchainchance) {
+                        xdmg = this.recalculateDamage(mult*this.info.onHit*9, target, true);
+                        if(target.takeDamage(xdmg)){
+                            let xx = this.x-25+(Math.random()*50);
+                            let yy = this.y-20+(Math.random()*40);
+                            this.scene.addTextEffect(new TextEffect(this.scene, xx-30+(Math.random()*60), yy-50+(Math.random()*100), Math.round(xdmg)+" !", "aqua", 45, true, "white"));
+                            this.scene.addHitEffect(new BasicEffect(this.scene, "magenta_sparkle", xx, yy, 15, 15, false, 0, (Math.random()*360), 0.5));
+                            this.onHitThisTick = 3;    
+                        }
                     }
                 }
             }
         }
     }
 
-    recalculateDamage(dmg: number, target: Enemy): number{
+    recalculateDamage(dmg: number, target: Enemy, truedamage: boolean = false): number{
         let r = dmg;
         let mult = 1;
         let mod = 0;
         if((target.armor[0] == 1) && (target.armor [1] == 0)) {
-            return r;
+            if(target.dmgRes == 0) {
+                return r;
+            }
         }
         mult = 100/(100+Math.round((target.armor[0]*(this.info.percentPen))-this.info.flatPen));
         mod = Math.round(((target.armor[1]*(this.info.percentPen))-this.info.flatPen));
+        if(truedamage) {
+            mult = 1;
+            mod = 0;
+        }
         if(mult > 1) {
             mult = 1;
         }
@@ -323,12 +370,14 @@ export class Projectile extends Phaser.GameObjects.Container {
             }
         }
 
+        /*
         if(target.bleedParams[0] && target.bleedParams[1]) {
-            r += Math.round(target.bleedValue[0]);
+            r += Math.round(target.bleedValue[0]*target.dmgRes);
             target.bleedParams[1] = false;
             target.bleedValue[1] = target.bleedValue[2];
             this.critThisTick = true;
         }
+        */
 
         return Math.round(r);
     }

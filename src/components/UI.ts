@@ -41,7 +41,7 @@ export class UI extends Phaser.GameObjects.Container {
 		this.panel.add(this.text);
 
 		this.livesText = this.scene.addText({
-			x: 156,
+			x: 136,
 			y: 900,
 			size: 70,
 			color: "#FF007F",

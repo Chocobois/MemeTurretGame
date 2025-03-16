@@ -44,6 +44,8 @@ export class Boss extends Enemy {
     public bleed: boolean = false;
     public bleedTimer: number = 0;
     public bleedAmount: number = 0;
+
+    public lockRes: number = 1;
     
     constructor(scene: GameScene, x: number, y: number, type: number = 0) {
         super(scene, x, y, type);
@@ -52,6 +54,12 @@ export class Boss extends Enemy {
             new BossCommand(this, [
                 {key: "nohit", value: [], args: [], conditions: [false]},
                 {key: "prorate", value: [], args: [], conditions: []},
+                //{key: "flashTitle", value: [], args: [], conditions: [false]},
+            ]),
+            new BossCommand(this, [
+                {key: "dmgres", value: [0.15], args: [], conditions: [false]},
+                {key: "wait", value: [5000], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []},
                 //{key: "flashTitle", value: [], args: [], conditions: [false]},
             ]),
             new BossCommand(this, [
@@ -108,6 +116,12 @@ export class Boss extends Enemy {
             ]), 
         ],
         [
+            new BossCommand(this, [
+                {key: "dmgres", value: [0.15], args: [], conditions: [false]},
+                {key: "wait", value: [5000], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []},
+                //{key: "flashTitle", value: [], args: [], conditions: [false]},
+            ]),
             new BossCommand(this, [
                 {key: "prorate", value: [], args: [], conditions: []},
                 {key: "HPThreshold", value: [0.5], args: [], conditions: []},
@@ -173,6 +187,12 @@ export class Boss extends Enemy {
                 {key: "random_mines", value: [1], args: [], conditions: []},
                 {key: "wait", value: [2250], args: [], conditions: []},
                 {key: "loop", value: [1], args: [], conditions: []},
+            ]),
+            new BossCommand(this, [
+                {key: "dmgres", value: [0.15], args: [], conditions: [false]},
+                {key: "wait", value: [6000], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []},
+                //{key: "flashTitle", value: [], args: [], conditions: [false]},
             ]),
             new BossCommand(this, [
                 {key: "wait", value: [1000], args: [], conditions: []},
@@ -275,6 +295,12 @@ export class Boss extends Enemy {
                 {key: "loop", value: [1], args: [], conditions: []},
             ]),
             new BossCommand(this, [
+                {key: "dmgres", value: [0.15], args: [], conditions: [false]},
+                {key: "wait", value: [5000], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []},
+                //{key: "flashTitle", value: [], args: [], conditions: [false]},
+            ]),
+            new BossCommand(this, [
                 {key: "clear", value: [], args: [], conditions: []},
                 {key: "wait", value: [3000], args: [], conditions: []},
                 {key: "wait", value: [250], args: [], conditions: []},
@@ -340,12 +366,18 @@ export class Boss extends Enemy {
             //Mandala commands: s0:texture, 0:maxscale, 1:rotation, 2:expansiontime, 3:alpha, b0:playsound, s1:soundfile
             new BossCommand(this, [
                 {key: "prorate", value: [], args: [], conditions: []},
-                {key: "HPThreshold", value: [0.8], args: [], conditions: []},
+                {key: "wait", value: [4000], args: [], conditions: []},
                 {key: "wait", value: [400], args: [], conditions: []},
                 {key: "wait", value: [250], args: [], conditions: []},
                 {key: "spacedFishSplitFromBack", value: [3], args: [], conditions: [true,true]},
                 {key: "wait", value: [1250], args: [], conditions: []},
                 {key: "loop", value: [3], args: [], conditions: []},
+            ]),
+            new BossCommand(this, [
+                {key: "dmgres", value: [0.35], args: [], conditions: [false]},
+                {key: "wait", value: [7500], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []},
+                //{key: "flashTitle", value: [], args: [], conditions: [false]},
             ]),
             /*
             new BossCommand(this, [
@@ -426,9 +458,12 @@ export class Boss extends Enemy {
                 {key: "nohit", value: [], args: [], conditions: [false]},
                 {key: "prorate", value: [], args: [], conditions: []},  
                 {key: "resetAngle", value: [], args: [], conditions: []},       
+                {key: "dmgres", value: [0.25], args: [], conditions: []},
                 {key: "wait", value: [2000], args: [], conditions: []},
                 {key: "wait", value: [4000], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []},
             ]),
+            
             new BossCommand(this, [
                 {key: "wait", value: [6000], args: [], conditions: []},
                 {key: "storeSpinLaser", value: [0,0], args: ["sLAngle", "iLAngle"], conditions: []},
@@ -541,6 +576,12 @@ export class Boss extends Enemy {
             //Mandala commands: s0:texture, 0:maxscale, 1:rotation, 2:expansiontime, 3:alpha, b0:playsound, s1:soundfile
 
             new BossCommand(this, [
+                {key: "dmgres", value: [0.25], args: [], conditions: [false]},
+                {key: "wait", value: [6000], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []},
+            ]),
+
+            new BossCommand(this, [
                 {key: "prorate", value: [], args: [], conditions: []},
                 {key: "wait", value: [150], args: [], conditions: []},
                 {key: "sound", value: [0.25], args: ["breadhit"], conditions: []},
@@ -610,9 +651,16 @@ export class Boss extends Enemy {
                 {key: "sound", value: [0.25], args: ["shot-1"], conditions: []},
                 {key: "shootCorner", value: [3], args: [], conditions: []},
                 {key: "wait", value: [150], args: [], conditions: []},
-                {key: "wait", value: [4000], args: [], conditions: []},
+                {key: "wait", value: [5000], args: [], conditions: []},
                 {key: "loop", value: [2], args: [], conditions: []},
             ]), 
+
+            new BossCommand(this, [
+                {key: "dmgres", value: [0.35], args: [], conditions: [false]},
+                {key: "wait", value: [5000], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []},
+            ]),
+
             new BossCommand(this, [
                 {key: "wait", value: [2500], args: [], conditions: []},
                 {key: "wait", value: [250], args: [], conditions: []},
@@ -622,7 +670,7 @@ export class Boss extends Enemy {
                 {key: "wait", value: [250], args: [], conditions: []},
                 {key: "sound", value: [0.4], args: ["thshoot"], conditions: []},
                 {key: "shootRockBlast", value: [0], args: [], conditions: []},
-                {key: "wait", value: [3600], args: [], conditions: []},
+                {key: "wait", value: [2600], args: [], conditions: []},
                 {key: "loop", value: [1], args: [], conditions: []},
             ]), 
             new BossCommand(this, [
@@ -667,9 +715,16 @@ export class Boss extends Enemy {
             new BossCommand(this, [{key: "wait", value: [1000], args: [], conditions: []},
                 {key: "birds", value: [], args: [], conditions: []},
                 {key: "nohit", value: [], args: [], conditions: [false]},
-                {key: "prorate", value: [], args: [], conditions: []},
+                {key: "dmgres", value: [0.25], args: [], conditions: []},
                 {key: "wait", value: [6000], args: [], conditions: []},
             ]),
+
+            new BossCommand(this, [
+            {key: "wait", value: [10000], args: [], conditions: []},
+            {key: "dmgres", value: [1], args: [], conditions: []},
+            {key: "prorate", value: [], args: [], conditions: []},
+            ]),
+
             new BossCommand(this, [
                 {key: "wait", value: [2000], args: [], conditions: []},
                 {key: "spaz", value: [6000], args: [], conditions: []},
@@ -753,8 +808,17 @@ export class Boss extends Enemy {
                 {key: "orbit", value: [1060,540,-120], args: [], conditions: []},
                 {key: "spin", value: [120], args: [], conditions: []},
                 {key: "nohit", value: [], args: [], conditions: [false]},
-                {key: "prorate", value: [], args: [], conditions: []},            
+                {key: "dmgres", value: [0.05], args: [], conditions: []}, 
+                {key: "prorate", value: [], args: [], conditions: []},           
             ]),
+
+            new BossCommand(this, [
+                {key: "wait", value: [10000], args: [], conditions: []},
+                {key: "unprorate", value: [], args: [], conditions: []},
+                {key: "prorate", value: [], args: [], conditions: []},
+                {key: "dmgres", value: [1], args: [], conditions: []}, 
+            ]),
+
             new BossCommand(this, [
                 {key: "wait", value: [6000], args: [], conditions: []},
                 {key: "aimSpreadPans", value: [3], args: [], conditions: []},
@@ -840,14 +904,7 @@ export class Boss extends Enemy {
                 {key: "sound", value: [0.45], args: ["big_gun_1"], conditions: []},
                 {key: "loop", value: [2], args: [], conditions: []},
             ]),
-            new BossCommand(this, [
-                {key: "HPThreshold", value: [0.6], args: [], conditions: []},
-                {key: "blasterH", value: [], args: [], conditions: []},
-                {key: "wait", value: [500], args: [], conditions: []},
-                {key: "blasterH", value: [], args: [], conditions: []},
-                {key: "wait", value: [3500], args: [], conditions: []},
-                {key: "loop", value: [1], args: [], conditions: []},
-            ]),
+
 
             new BossCommand(this, [
                 {key: "HPThreshold", value: [0.9], args: [], conditions: []},
@@ -871,8 +928,24 @@ export class Boss extends Enemy {
                 {key: "loop", value: [1], args: [], conditions: []},
             ]),
             new BossCommand(this, [
+                {key: "HPThreshold", value: [0.6], args: [], conditions: []},
+                {key: "blasterH", value: [], args: [], conditions: []},
+                {key: "wait", value: [500], args: [], conditions: []},
+                {key: "blasterH", value: [], args: [], conditions: []},
+                {key: "wait", value: [3500], args: [], conditions: []},
+                {key: "loop", value: [1], args: [], conditions: []},
+            ]),
+            new BossCommand(this, [
                 {key: "HPThreshold", value: [0.35], args: [], conditions: []},
-                {key: "resist", value: [0.65], args: [], conditions: []},
+                {key: "dmgres", value: [0.01], args: [], conditions: []},
+                {key: "resetBleed", value: [40,500], args: [], conditions: []},
+                {key: "wait", value: [6500], args: [], conditions: []},
+                {key: "dmgres", value: [0.65], args: [], conditions: []},
+
+            ]),
+
+            new BossCommand(this, [
+                {key: "HPThreshold", value: [0.35], args: [], conditions: []},
                 {key: "circleSpam", value: [500,240,19,24], args: ["sd"], conditions: []},
                 {key: "wait", value: [100], args: [], conditions: []},
                 {key: "circleSpam", value: [500,240,22,36], args: ["sn"], conditions: []},
@@ -887,6 +960,8 @@ export class Boss extends Enemy {
                 {key: "wait", value: [100], args: [], conditions: []},
                 {key: "loop", value: [2], args: [], conditions: []},
             ]),
+
+
 
             new BossCommand(this, [
                 {key: "HPThreshold", value: [0.01], args: [], conditions: []},
@@ -997,8 +1072,9 @@ export class Boss extends Enemy {
                 this.myMandala.splice(0,1);
             }
         }
+        this.calcBleed(d,t);
         if(this.prr) {
-            this.tEl += (d/1000);
+            this.tEl += (d);
 
             let mh = (this.maxHealth-this.health);
             //console.log("HEALTHLOSS: " + mh);
@@ -1008,29 +1084,31 @@ export class Boss extends Enemy {
                 this.dmgRes = 1;
             } else {
                 //console.log("RE DPS: " + (mh/this.tEl));
-                this.dps = (mh/this.tEl);
+                this.dps = (mh/(this.tEl/1000));
                // console.log("DPS: " + this.dps);
+                this.maxdps = this.maxHealth/25;
                 let rd = this.maxdps/this.dps;
                 this.scene.spValue=rd;
-                if(rd > 2) {
-                    rd = 2;
+                if(rd > 1) {
+                    rd = 1;
                 }
-                if(rd < 0.01) {
-                    rd = 0.01;
+                if(rd < 0.001) {
+                    rd = 0.001;
                 }
                 this.dmgRes = rd;
 
-                if(this.tEl > 30) {
-                    this.dmgRes=2;
+                if(this.tEl > 30000) {
+                    this.dmgRes = 1;
                     if(!this.bleedParams[0]) {
                         this.bleedParams = [true,true];
-                        this.bleedValue = [this.health/50,0,500];
+                        this.bleedValue = [this.health/40,0,500];
                     }
                 }
 
-                if(this.tEl > 24) {
-                    this.dmgRes=1.75;
+                if(this.lockRes != 1){
+                    this.dmgRes = this.lockRes;
                 }
+
             }
         }
         if(this.hasBirds && (this.birds.length > 0))
@@ -1077,6 +1155,8 @@ export class Boss extends Enemy {
         this.dps = 0;
         this.tEl = 0;
         this.dmgRes = 1;
+        this.bleedParams = [false,false];
+        this.bleedValue = [0,0,500];
     }
 
     stopProrate(){
@@ -1084,6 +1164,18 @@ export class Boss extends Enemy {
         this.dps = 0;
         this.tEl = 0;
         this.dmgRes = 1;
+        this.bleedParams = [false,false];
+        this.bleedValue = [0,0,500];
+    }
+
+    recalcBleed(qt: number, cd: number){
+        if(this.bleedParams[0]){
+            this.bleedParams = [true,true];
+            this.bleedValue = [this.health/qt,0,cd];
+        }
+    }
+
+    removeBleed(){
         this.bleedParams = [false,false];
         this.bleedValue = [0,0,500];
     }
@@ -1320,6 +1412,9 @@ export class Boss extends Enemy {
 
     die(){
         this.deadFlag = true;
+        this.tEl = 0;
+        this.dmgRes = 1;
+        this.removeBleed();
     }
 
     addMandala(m: Mandala) {

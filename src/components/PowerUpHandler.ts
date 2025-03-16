@@ -138,7 +138,7 @@ export class PowerUpHandler{
     setPowerUpTable(){
         this.powerUpTable.set(powerID.NULL, [0]);
         this.powerUpTable.set(powerID.PLAIN_GRAY, [0]);
-        this.powerUpTable.set(powerID.BASE_DMG, [10]);
+        this.powerUpTable.set(powerID.BASE_DMG, [5]);
         this.powerUpTable.set(powerID.FLAT_CRIT, [0.15]);
         this.powerUpTable.set(powerID.SPEED, [0.2]);
         this.powerUpTable.set(powerID.ROF, [0.20]);
@@ -366,11 +366,11 @@ export class PowerUpHandler{
             } case powerID.SQUARED_DMG: { //RAINBOW
                 this.currentIterations = this.widgetTable[n].iterations;
                 this.checkForward();
-                this.workingParam.baseDamage += Math.pow(this.baseDamage+(this.currentIterations-1),2);
-                this.workingParam.missileCount += Math.pow(this.workingParam.missileCount+(this.currentIterations-1),2);
+                this.workingParam.baseDamage = Math.pow(this.baseDamage+(this.currentIterations-1),2);
+                this.workingParam.missileCount = Math.pow(this.workingParam.missileCount+(this.currentIterations-1),2);
 
                 this.workingParam.onhitchain = true;
-                this.workingParam.onhitchainchance += 0.1*this.currentIterations;
+                this.workingParam.onhitchainchance += 0.2*this.currentIterations;
                 break;
             } case powerID.SMITE: {
                 this.currentIterations = this.widgetTable[n].iterations;
@@ -519,6 +519,18 @@ export class PowerUpHandler{
             return;
         }
         
+    }
+
+    checkForWidget(id: number): boolean{
+        let check = false;
+        for(let nn = 0; nn < this.widgetTable.length; nn++) {
+            if(!(this.widgetTable[nn]) == null){
+                if(this.widgetTable[nn].ID == id){
+                    check = true;
+                }
+            }
+        }
+        return check;
     }
 
     setBingosByButton(pt: PowerUpButton[]) {

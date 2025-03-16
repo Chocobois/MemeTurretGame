@@ -63,7 +63,7 @@ export class Turret{
 		this.turretDisplay = new TurretModel(scene,x,y,this);
 		this.defaultParams = {
             baseDamage: 18,
-            critChance: 0, critDmg: 2.5, critMod: 1,
+            critChance: 0, critDmg: 2, critMod: 1,
             rof: 1.5, acc: 0,
             shotgun: false, shotgunPellets: 0, shotgunDmg: 0,
             pspeed: 1,
@@ -307,7 +307,7 @@ export class Turret{
 		}
 		v = this.powerUpInfo.currentBingos.get(pColor.RED)!;
 		if(v > 0) {
-			this.workingParams.critDmg += (0.3*v);
+			this.workingParams.critDmg += (0.15*v);
 		}
 		v = this.powerUpInfo.currentBingos.get(pColor.BLUE)!;
 		if(v > 0) {
@@ -322,7 +322,11 @@ export class Turret{
 		v = this.powerUpInfo.currentBingos.get(pColor.RAINBOW)!;
 		if(v > 0) {
 			this.scene.gameData.extraMaxLives = v;
+		} else {
+			this.scene.gameData.extraMaxLives = 0;
 		}
+		this.scene.gameData.restoreAllLives();
+		this.scene.gameData.lives += this.scene.gameData.extraMaxLives;
 	}
 
 	resetScene(scene: GameScene){

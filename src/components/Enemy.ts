@@ -403,10 +403,10 @@ export class Enemy extends Phaser.GameObjects.Container {
             sound: "dead_1", dieAnim: "meme_explosion", explInfo:[18,50], escapeSound: true,
             radius: 100, useBox: false, boxParams: [1,1],
             vx: -600, vy: 0, ax: 0, ay: 0, variancex: -250, variancey: 0, faceAngle: false,
-            bounce: true, amp: 1, armor: [40,3], shoot: false, burst: 6, cooldown: 8000,
+            bounce: true, amp: 1, armor: [40,3], shoot: true, burst: 5, cooldown: 7500,
             reflect: false, reflectAmtX: 2, reflectAmtY: 200,
-            park: false, parkX: 1600, parkVariance: 125,
-            shotType: 1, shootRadius: 800, shootSound: "machinegun",
+            park: true, parkX: 600, parkVariance: 50,
+            shotType: 1, shootRadius: 1240, shootSound: "big_gun_1",
         },
         {
             health: 200000, //3
@@ -686,6 +686,8 @@ export class Enemy extends Phaser.GameObjects.Container {
         }
         this.offset = Math.random()*250;
         this.bounce = this.myInfo.bounce;
+        this.park = this.myInfo.park;
+        this.parkX = this.myInfo.parkX - (this.myInfo.parkVariance) + (2*this.myInfo.parkVariance*Math.random());
         this.amplitude = this.myInfo.amp;
         if(this.myInfo.reflect) {
             this.queueReflect = true;
@@ -810,6 +812,30 @@ export class Enemy extends Phaser.GameObjects.Container {
         return true;
     }
 
+    calcBleed(d:number,t:number){
+        if(this.deleteFlag || this.noHitCheck) {
+            return false;
+        }
+        if(this.bleedParams[0]) {
+            if(this.bleedParams[1]) {
+                this.health -= Math.round(this.bleedValue[0]);
+                this.bleedParams[1] = false;
+                this.bleedValue[1] = this.bleedValue[2];
+                let dx = this.x-(0.325*this.mySprite.width)+(Math.random()*(0.75*this.mySprite.width));
+                let dy = this.y-(0.325*this.mySprite.height)+(Math.random()*(0.75*this.mySprite.height))
+                this.scene.addHitEffect(new BasicEffect(this.scene, "hit_spark", dx, dy, 3, 50, false, 0, 0, 1));
+                this.scene.addTextEffect(new TextEffect(this.scene, dx-30+(Math.random()*60), dy-50+(Math.random()*100), Math.round(this.bleedValue[0])+"", "red", 50));
+            } else {
+                this.bleedValue[1] -= d;
+                if(this.bleedValue[1] <= 0){
+                    this.bleedValue[1] = 0;
+                    this.bleedParams[1] = true;
+                }
+            }
+
+        }
+    }
+
     takePierceDamage(dmg: number, pID: number, pierceCD: number): boolean {
         if(this.deleteFlag || this.noHitCheck){
             return false;
@@ -852,6 +878,8 @@ export class Enemy extends Phaser.GameObjects.Container {
         if(this.shieldCooldown > 0) {
             this.shieldCooldown -= d;
         }
+
+        this.calcBleed(d,t);
     }
 
     protected updateAngle(){
@@ -892,6 +920,15 @@ export class Enemy extends Phaser.GameObjects.Container {
         if(this.bounce){
             this.y += this.slow*this.amplitude*4*Math.sin((this.offset+t)/250);
         }
+
+        if(this.park) {
+            if(this.parkX != 0){
+                if(this.x <= this.parkX){
+                    this.x = this.parkX;
+                }
+            }
+        }
+
         if(this.slowTimer > 0) {
             this.slowTimer -= d;
             if(this.slowTimer <= 0) {
@@ -1054,6 +1091,7 @@ export class Enemy extends Phaser.GameObjects.Container {
         this.scene.addHitEffect(new BasicEffect(this.scene, this.myInfo.dieAnim, this.x, this.y, this.myInfo.explInfo[0], this.myInfo.explInfo[1], false, 0));
         this.scene.addTextEffect(new TextEffect(this.scene, 1595-30+(Math.random()*60), 875-30+(Math.random()*60), "+" + this.scene.gameData.addGold(this.maxHealth) +" €", "yellow", 60, true, "white", 800, 100, 0.7, 0));
         this.deleteFlag = true;
+        this.scene.trackEnemyKill();
     }
 
     despawn(){

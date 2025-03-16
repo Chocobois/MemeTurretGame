@@ -20,16 +20,18 @@ export class GlobalVariables{
     private maxStages: number = 1;
     public seenTransition: boolean = false;
     public gold: number = 0;
-    public scaling: number = 1.05;
+    public scaling: number = 1.00;
     public scoreTracker: number = 0;
     public scoreThreshold: number = 1000000;
     public goldBonus: number = 0;
-    public lives: number = 3;
-    public maxLives: number = 3;
+    public lives: number = 10;
+    public maxLives: number = 10;
     public extraMaxLives: number = 0;
     public failState: boolean = false;
     public boss_script_0: BossCommand[];
     public boss_script_1: BossCommand[];
+    public kills: number = 0;
+    public nextReqWidget: number = -1;
     private widgetDropTable: number [][] =
 [
     //null
@@ -61,7 +63,7 @@ export class GlobalVariables{
     [71, 75],
     [75, 77],
     //rainbow
-    [77, 77.5],
+    [77, 77.5], // no
     [77.5, 78.5],
     [78.5, 80],
     //scaling widget (doesn't drop)
@@ -70,6 +72,7 @@ export class GlobalVariables{
     
     constructor(){
         //ID, owned, used
+        // btw scaling widget is 25 and p^2 is 22
         this.myWidgets = [[0,1,0],[1,2,0],[2,2,0],[3,2,0],[4,2,0],[5,2,0],[6,4,0],[7,2,0],[8,2,0],[9,3,0],[10,2,0],[11,3,0],[12,3,0],
         [13,3,0],[14,8,0],[15,3,0],[16,3,0],[17,3,0],[18,4,0],[19,4,0],[20,5,0],[21,5,0],[22,1,0],[23,3,0],[24,3,0],[25,1,0]];
 
@@ -78,6 +81,11 @@ export class GlobalVariables{
 
 
         
+    }
+
+    public updateKills(n: number){
+        this.kills += n;
+        this.scaling = 1.0 + ((0.005)*this.kills);
     }
 
     public addGold(g: number): number {
