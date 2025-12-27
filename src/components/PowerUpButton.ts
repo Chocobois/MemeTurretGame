@@ -28,6 +28,7 @@ export class PowerUpButton extends Button {
     private DEFAULT_RADIUS: number = 75;
     public snappedPosition: number = -1;
     public veiled: boolean = false;
+    public discard: boolean = false;
 
     constructor(scene: UpgradeScene, x: number, y: number, color: number, sprtext: string, mode: number = 0, type = 0){
         super(scene,x,y);
@@ -114,6 +115,10 @@ export class PowerUpButton extends Button {
         this.isDragging = false;
         if(!this.snapped) {
             this.snapToLocation(this.DEFAULT_RADIUS);
+        }
+        if((this.x > 815) || (this.y < 278)) {
+            this.veil();
+            this.discard = true;
         }
     }
 

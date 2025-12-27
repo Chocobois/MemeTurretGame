@@ -299,7 +299,15 @@ export class UpgradeScene extends BaseScene {
 				if(this.currentPowerUpButtons[n].deleteFlag){
 					this.currentPowerUpButtons[n].destroy();
 					this.currentPowerUpButtons.splice(n,1);
+				} else {
+					if(this.currentPowerUpButtons[n].discard) {
+						this.returnWidget(this.currentPowerUpButtons[n].pType);
+						this.currentPowerUpButtons[n].deleteFlag = true;
+						this.currentPowerUpButtons[n].destroy();
+						this.currentPowerUpButtons.splice(n,1);
+					}
 				}
+
 			}
 		}
 
